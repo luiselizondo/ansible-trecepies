@@ -1,0 +1,11 @@
+- hosts: all_hosts
+  user: root
+  sudo: yes
+  roles:
+    - {role: common, tags: [ 'common' ]}
+
+- hosts: docker_hosts
+  user: root
+  sudo: yes
+  roles:
+    - {role: docker, tags: [ 'docker' ]}

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+set -u
+
+exec ansible-playbook -i $HOSTS servers.yml
