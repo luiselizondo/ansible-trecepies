@@ -3,4 +3,4 @@
 set -e
 set -u
 
-exec ansible-playbook -i $HOSTS servers.yml
+exec ansible-playbook $HOSTS -i servers.yml
