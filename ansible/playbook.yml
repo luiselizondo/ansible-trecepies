@@ -1,0 +1,13 @@
+- name: install common software
+  hosts: all_hosts
+  user: root
+  sudo: yes
+  roles:
+    - all
+
+- name: install docker
+  hosts: docker_hosts
+  user: root
+  sudo: yes
+  roles:
+    - docker
