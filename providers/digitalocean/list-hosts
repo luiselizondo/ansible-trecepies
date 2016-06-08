@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -x
+set -e
+
+# Prepare the .doctlcfg file with the TOKEN_API variable
+echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
+
+doctl compute droplet list
