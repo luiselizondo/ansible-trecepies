@@ -8,3 +8,12 @@ curl -sSL https://get.docker.com/ | sh
 
 echo "Building the Docker image"
 docker build --tag=runner .
+
+echo "Adding Jenkins user to Docker"
+sudo usermod -aG docker jenkins
+
+mkdir -p /opt/app/jenkins/docker
+
+echo "DOCKER_OPTS=' --host=unix:///var/run/docker.sock --restart=false -g /opt/app/jenkins/docker -G jenkins'" >> /etc/default/docker
+
+sudo service docker restart
