@@ -5,4 +5,5 @@ MAINTAINER Luis Elizondo <lelizondo@gmail.com>
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
 
-RUN apt-get -y install openssh-server git curl python 
+RUN apt-get update && \
+    apt-get -y install openssh-server git curl python 
