@@ -18,10 +18,9 @@ RUN apt-get dist-upgrade -y && \
 RUN ( echo ubuntu ; echo ubuntu ) | passwd root
 RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config
 
-RUN mkdir -p /var/run/sshd ; chmod 0755 /var/run/sshd
-
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
 COPY providers /opt/providers
+COPY scripts/start-sshd /opt/start-sshd
 EXPOSE 22
-CMD /usr/sbin/sshd -D
+CMD /opt/start-sshd
