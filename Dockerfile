@@ -21,3 +21,5 @@ RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
 COPY providers /opt/providers
+EXPOSE 22
+CMD /usr/sbin/sshd -D
