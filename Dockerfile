@@ -17,6 +17,8 @@ RUN apt-get dist-upgrade -y && \
 
 RUN ( echo ubuntu ; echo ubuntu ) | passwd root
 RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config
+RUN sed -i 's/#PasswordAuthentication .*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+RUN sed -i 's/UsePAM .*/UsePAM no/g' /etc/ssh/sshd_config
 
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
