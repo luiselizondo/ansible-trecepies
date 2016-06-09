@@ -20,6 +20,8 @@ RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication .*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 RUN sed -i 's/UsePAM .*/UsePAM no/g' /etc/ssh/sshd_config
 
+COPY ssh-keys/automation-key.pub /root/.ssh/authorized_keys
+
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
 COPY providers /opt/providers
