@@ -32,6 +32,7 @@ RUN mkdir -p /root/.ssh && \
 # TODO remove this step
 COPY ssh-keys/automation-key.pub /root/.ssh/authorized_keys
 
+COPY ansible/ansible.cfg /etc/ansible/ansible.cfg
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
 COPY providers /opt/providers
