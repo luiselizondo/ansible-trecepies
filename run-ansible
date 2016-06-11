@@ -20,7 +20,8 @@ do
   ssh -v -i ~/.ssh/automation-key root@$HOST "echo $HOME"
 done
 
+
 echo "Installing to: $(cat $HOSTS)"
 
 # TODO: Need to determine the hosts and save them to ansible/hosts or to a temp file
-ansible-playbook -i $HOSTS ansible/playbook.yml
+ansible-playbook -v -i $HOSTS ansible/playbook.yml
