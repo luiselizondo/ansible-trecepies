@@ -13,5 +13,14 @@ done
 
 echo "Installing to: $(cat $HOSTS)"
 
+echo "Files in /root/.ssh"
+ls /root/.ssh
+
+echo "Doing ping to $HOSTS"
+ping -c 2 $HOSTS
+
+echo "Executing test command on host"
+ssh -i automation-key root@$HOSTS "echo $HOME"
+
 # TODO: Need to determine the hosts and save them to ansible/hosts or to a temp file
 ansible-playbook -i $HOSTS ansible/playbook.yml
