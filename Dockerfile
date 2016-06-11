@@ -25,6 +25,6 @@ COPY ssh-keys/automation-key.pub /root/.ssh/authorized_keys
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
 COPY providers /opt/providers
-COPY scripts/start-sshd /opt/start-sshd
+COPY scripts /opt
 EXPOSE 22
 CMD /opt/start-sshd
