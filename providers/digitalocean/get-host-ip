@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -x
+set -e
+
+IP=$1
+
+# Prepare the .doctlcfg file with the TOKEN_API variable
+echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
+doctl compute droplet get $IP --format PublicIPv4 --no-header
