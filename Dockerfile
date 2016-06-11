@@ -17,7 +17,7 @@ RUN apt-get dist-upgrade -y && \
 
 RUN ( echo ubuntu ; echo ubuntu ) | passwd root
 # not very useful until it can run sudo commands
-RUN ( echo ubuntu ; echo ubuntu ) | passwd jenkins
+# RUN ( echo ubuntu ; echo ubuntu ) | passwd jenkins
 
 RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication .*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
