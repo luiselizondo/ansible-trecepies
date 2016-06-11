@@ -8,10 +8,8 @@ USER=$1
 HOST_IP=$2
 
 ssh -o StrictHostKeyChecking=no -i ~/.ssh/automation-key $USER@$HOST_IP <<EOF
-
-SSH_DIRECTORY=$HOME/.ssh
-touch $SSH_DIRECTORY/config
-echo "Host *" >> $SSH_DIRECTORY/config
-echo "StrictHostKeyChecking no" >> $SSH_DIRECTORY/config
-echo "UserKnownHostsFile=/dev/null" >> $SSH_DIRECTORY/config
+touch $HOME/.ssh/config
+echo "Host *" >> $HOME/.ssh/config
+echo "StrictHostKeyChecking no" >> $HOME/.ssh/config
+echo "UserKnownHostsFile=/dev/null" >> $HOME/.ssh/config
 EOF
