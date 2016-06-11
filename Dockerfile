@@ -20,6 +20,12 @@ RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication .*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 RUN sed -i 's/UsePAM .*/UsePAM no/g' /etc/ssh/sshd_config
 
+RUN touch /root/.ssh/config && \
+    echo "Host *" >> /root/.ssh/config && \
+    echo "StrictHostKeyChecking no" >> /root/.ssh/config && \
+    echo "UserKnownHostsFile=/dev/null" >> /root/.ssh/config
+
+# TODO remove this step
 COPY ssh-keys/automation-key.pub /root/.ssh/authorized_keys
 
 COPY ansible /opt/ansible
