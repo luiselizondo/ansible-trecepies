@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SSH_DIRECTORY=$HOME/.ssh
+
+touch $SSH_DIRECTORY/config
+echo "Host *" >> $SSH_DIRECTORY/config
+echo "StrictHostKeyChecking no" >> $SSH_DIRECTORY/config
+echo "UserKnownHostsFile=/dev/null" >> $SSH_DIRECTORY/config
