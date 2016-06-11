@@ -6,7 +6,7 @@
     - all
 
 - name: install docker
-  hosts: docker_hosts
+  hosts: all_hosts
   user: root
   sudo: yes
   roles:

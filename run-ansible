@@ -4,26 +4,14 @@ if [ -n $LIMIT_TO_HOSTS ]; then
   echo "LIMIT_TO_HOSTS is: ${LIMIT_TO_HOSTS}"
 fi
 
-echo "Files in /root/.ssh"
-ls /root/.ssh
-
 HOSTS=`mktemp`
 echo "[all_hosts]" > $HOSTS
 for HOST in $LIMIT_TO_HOSTS
 do
   echo $HOST >> $HOSTS
-
-  echo "Doing ping to $HOST"
-  ping -c 2 $HOST
-
-  echo "Executing test command on host"
-  ssh -v -i ~/.ssh/automation-key root@$HOST "echo $HOME"
 done
-
-echo "Setting automation-key as the default key"
-ssh-add ~/.ssh/automation-key
 
 echo "Installing to: $(cat $HOSTS)"
 
 # TODO: Need to determine the hosts and save them to ansible/hosts or to a temp file
-ansible-playbook -vvvv -i $HOSTS ansible/playbook.yml
+ansible-playbook -i $HOSTS ansible/playbook.yml
