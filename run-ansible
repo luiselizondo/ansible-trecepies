@@ -17,7 +17,7 @@ do
   ping -c 2 $HOST
 
   echo "Executing test command on host"
-  ssh -i ~/.ssh/automation-key root@$HOST "echo $HOME"
+  ssh -v -i ~/.ssh/automation-key root@$HOST "echo $HOME"
 done
 
 echo "Installing to: $(cat $HOSTS)"
