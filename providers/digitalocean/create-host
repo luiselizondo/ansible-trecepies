@@ -1,9 +1,63 @@
 #!/bin/bash
 
-set -x
+
+
+OUTPUT=/tmp/output.log
+TIMES_TO_RETRY=3
+
+function errorTrap {
+  status=$?
+  echo "ERROR: Command exited with status $status."
+}
+
+function getPublicIP {
+  id=$1
+  ip=$(doctl compute droplet get ${id} --format PublicIPv4 | sed 's/Public IPv4//g' | sed '/^\s*$/d')
+  echo $ip
+}
+
+if [ ! -s $HOME/.doctlcfg ] && [ -n "$TOKEN_API" ]; then
+  # Prepare the .doctlcfg file with the TOKEN_API variable
+  echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
+fi
+
+set -u
 set -e
 
-# Prepare the .doctlcfg file with the TOKEN_API variable
-echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
+doctl compute droplet create $NAME --region $REGION --image $IMAGE --size $SIZE --ssh-keys $SSH_KEY_ID > $OUTPUT
 
-doctl compute droplet create $NAME --region $REGION --image $IMAGE --size $SIZE --ssh-keys $SSH_KEY_ID
+DROPLET_ID=$(cat $OUTPUT | awk '{print $1}' | sed 's/ID//g' | sed '/^\s*$/d')
+
+if [ -n $DROPLET_ID ]; then
+  DROPLET_HAS_IP="no"
+
+  IP=$(getPublicIP $DROPLET_ID)
+
+  echo $IP
+
+  if [ -n "$IP" ]; then
+    DROPLET_HAS_IP="yes"
+    echo $IP
+    exit 0
+  fi
+
+  if [ $DROPLET_HAS_IP = "no" ]; then
+    COUNTER=0
+    while [ $COUNTER -le "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; do
+      sleep 30
+      IP=$(getPublicIP $DROPLET_ID)
+      if [ -n "$IP" ]; then
+        DROPLET_HAS_IP="yes"
+        COUNTER=4
+        echo $IP
+        exit 0
+      fi
+
+      if [ $COUNTER -eq "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; then
+        trap errorTrap EXIT
+      fi
+    done
+  fi
+else
+  trap errorTrap EXIT
+fi
