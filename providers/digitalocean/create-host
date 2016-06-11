@@ -33,7 +33,7 @@ if [ -n $DROPLET_ID ]; then
 
   IP=$(getPublicIP $DROPLET_ID)
 
-  echo $IP
+  echo $IP | sed '/^\s*$/d'
 
   if [ -n "$IP" ]; then
     DROPLET_HAS_IP="yes"
@@ -49,7 +49,7 @@ if [ -n $DROPLET_ID ]; then
       if [ -n "$IP" ]; then
         DROPLET_HAS_IP="yes"
         COUNTER=4
-        echo $IP
+        echo $IP | sed '/^\s*$/d'
         exit 0
       fi
 
