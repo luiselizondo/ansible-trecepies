@@ -281,7 +281,7 @@ describe("Hosts persistence", function() {
         hosts.getWithLabel("docker", function(err, results) {
           results.should.be.an.Array;
           results.should.have.length(2);
-          
+
           results[0].data.should.have.property("id", hostsValues[1].id);
           results[0].data.should.have.property("cloud", hostsValues[1].cloud);
           results[0].data.should.have.property("ip4", hostsValues[1].ip4);
@@ -292,5 +292,28 @@ describe("Hosts persistence", function() {
         });
       });
     });
+  });
+
+  describe("Delete", function() {
+    it("Should delete an item", function(done) {
+      var host = {
+        cloud: "digitalocean",
+        id: "17269744",
+        ip4: "127.0.0.1",
+        name: "ubuntu-1",
+        labels: [
+          "web", "docker"
+        ]
+      }
+
+      hosts.save(host, function(err, result) {
+        hosts.remove(host.cloud + ":" + host.id, function(err, result) {
+          should.not.exist(err);
+          result.should.be.an.Object;
+          result.should.have.property("key", host.cloud + ":" + host.id);
+          done();
+        });
+      });
+    })
   });
 });

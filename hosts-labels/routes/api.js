@@ -48,4 +48,15 @@ router.get("/labels/:label", function(req, res, next) {
   })
 });
 
+router.delete("/hosts/:id", function(req, res, next) {
+  var id = req.params.id;
+  hosts.remove(id, function(err, results) {
+    if(err) {
+      return res.status(406).json({error: err});
+    }
+
+    return res.status(200).json(results);
+  });
+});
+
 module.exports = router;

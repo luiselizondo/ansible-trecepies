@@ -130,4 +130,18 @@ hosts.getWithLabel = function(label, callback) {
   return callback(null, hostsWithLabel);
 }
 
+hosts.remove = function(id, callback) {
+  var storage = init();
+  return storage.removeItem(id, function(err, result) {
+    var res = null;
+    if(result) {
+      res = {
+        key: id
+      }
+    }
+
+    return callback(err, res);
+  });
+}
+
 module.exports = hosts;
