@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -x
+set -u
+set -e
+
+HOSTS_TO_DELETE=$1
+
+function destroyHost {
+  id=$1
+  doctl compute droplet delete $id
+}
+
+if [ ! -s $HOME/.doctlcfg ] && [ -n "$TOKEN_API" ]; then
+  # Prepare the .doctlcfg file with the TOKEN_API variable
+  echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
+fi
+
+for host in $HOSTS_TO_DELETE; do
+  destroyHost $host
+done

@@ -1,10 +1,5 @@
 #!/bin/bash
 
-
-
-OUTPUT=/tmp/output.log
-TIMES_TO_RETRY=3
-
 function errorTrap {
   status=$?
   echo "ERROR: Command exited with status $status."
@@ -16,6 +11,24 @@ function getPublicIP {
   echo $ip
 }
 
+HOSTS_FILE=`mktemp`
+function addToHostsFile {
+  host_ip=$1
+  echo "$host_ip " >> $HOSTS_FILE
+}
+
+function createHost {
+  name=$1
+  region=$2
+  image=$3
+  size=$4
+  ssh_key_id=$5
+
+  output=`mktemp`
+  doctl compute droplet create $name --region $region --image $image --size $size --ssh-keys $ssh_key_id > $output
+  cat $output | awk '{print $1}' | sed 's/ID//g' | sed '/^\s*$/d'
+}
+
 if [ ! -s $HOME/.doctlcfg ] && [ -n "$TOKEN_API" ]; then
   # Prepare the .doctlcfg file with the TOKEN_API variable
   echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
@@ -24,40 +37,44 @@ fi
 set -u
 set -e
 
-doctl compute droplet create $NAME --region $REGION --image $IMAGE --size $SIZE --ssh-keys $SSH_KEY_ID > $OUTPUT
+TIMES_TO_RETRY=3
+HOSTS_COUNTER=0
+while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
+  let HOSTS_COUNTER=$HOSTS_COUNTER+1
+  echo "Creating host: $HOSTS_COUNTER of $HOSTS_TO_CREATE"
+  name=${NAME}-${HOSTS_COUNTER}
+  echo "Creating host with name $name"
+  DROPLET_ID=$(createHost $name $REGION $IMAGE $SIZE $SSH_KEY_ID)
 
-DROPLET_ID=$(cat $OUTPUT | awk '{print $1}' | sed 's/ID//g' | sed '/^\s*$/d')
+  if [ -n $DROPLET_ID ]; then
+    DROPLET_HAS_IP="no"
 
-if [ -n $DROPLET_ID ]; then
-  DROPLET_HAS_IP="no"
+    IP=$(getPublicIP $DROPLET_ID)
 
-  IP=$(getPublicIP $DROPLET_ID)
+    if [ -n "$IP" ]; then
+      DROPLET_HAS_IP="yes"
+      addToHostsFile $(echo $IP | sed '/^\s*$/d')
+    fi
 
-  echo $IP | sed '/^\s*$/d'
+    if [ $DROPLET_HAS_IP = "no" ]; then
+      COUNTER=0
+      while [ $COUNTER -le "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; do
+        sleep 30
+        IP=$(getPublicIP $DROPLET_ID)
+        if [ -n "$IP" ]; then
+          DROPLET_HAS_IP="yes"
+          COUNTER=4
+          addToHostsFile $(echo $IP | sed '/^\s*$/d')
+        fi
 
-  if [ -n "$IP" ]; then
-    DROPLET_HAS_IP="yes"
-    echo $IP
-    exit 0
+        if [ $COUNTER -eq "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; then
+          trap errorTrap EXIT
+        fi
+      done
+    fi
+  else
+    trap errorTrap EXIT
   fi
+done
 
-  if [ $DROPLET_HAS_IP = "no" ]; then
-    COUNTER=0
-    while [ $COUNTER -le "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; do
-      sleep 30
-      IP=$(getPublicIP $DROPLET_ID)
-      if [ -n "$IP" ]; then
-        DROPLET_HAS_IP="yes"
-        COUNTER=4
-        echo $IP | sed '/^\s*$/d'
-        exit 0
-      fi
-
-      if [ $COUNTER -eq "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; then
-        trap errorTrap EXIT
-      fi
-    done
-  fi
-else
-  trap errorTrap EXIT
-fi
+cat $HOSTS_FILE
