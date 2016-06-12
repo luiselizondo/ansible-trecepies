@@ -77,4 +77,4 @@ while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
   fi
 done
 
-cat $HOSTS_FILE
+cat $HOSTS_FILE | tr '\n' ' ' | sed '/^\s*$/d'
