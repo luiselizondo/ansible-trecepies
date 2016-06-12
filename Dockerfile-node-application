@@ -1,4 +1,4 @@
-FROM luis/alpine-node:6
+FROM luis/alpine-nodejs:6
 MAINTAINER Luis Elizondo <lelizondo@gmail.com>
 
 COPY hosts-labels /var/www
