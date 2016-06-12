@@ -1,0 +1,9 @@
+FROM luis/alpine-node:6
+MAINTAINER Luis Elizondo <lelizondo@gmail.com>
+
+COPY hosts-labels /var/www
+RUN cd /var/www && \
+    npm install
+
+VOLUMES /var/www/persistence
+EXPOSE 80
