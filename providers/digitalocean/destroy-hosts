@@ -13,6 +13,7 @@ function destroyHost {
 
 
 function deleteHostLabel() {
+  provider="digitalocean"
   id="${provider}:${1}"
 
   json=$(/opt/hosts-registration delete $id)
