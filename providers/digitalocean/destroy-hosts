@@ -11,6 +11,14 @@ function destroyHost {
   doctl compute droplet delete $id
 }
 
+
+function deleteHostLabel() {
+  id="${provider}:${1}"
+
+  json=$(/opt/hosts-registration delete $id)
+  echo $json
+}
+
 if [ ! -s $HOME/.doctlcfg ] && [ -n "$TOKEN_API" ]; then
   # Prepare the .doctlcfg file with the TOKEN_API variable
   echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
@@ -18,4 +26,5 @@ fi
 
 for host in $HOSTS_TO_DELETE; do
   destroyHost $host
+  deleteHostLabel $host
 done
