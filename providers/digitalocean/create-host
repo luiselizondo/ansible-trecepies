@@ -34,6 +34,17 @@ if [ ! -s $HOME/.doctlcfg ] && [ -n "$TOKEN_API" ]; then
   echo "access-token: $TOKEN_API" > ${HOME}/.doctlcfg
 fi
 
+function registerHost() {
+  name=$1
+  provider="digitalocean"
+  ip4=$2
+  id=$3
+  labels=$4
+
+  json=$(/opt/hosts-registration create -n $name -c $provider -i $ip4 -d $id -l $labels)
+  echo $json
+}
+
 set -u
 set -e
 
@@ -43,7 +54,7 @@ while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
   let HOSTS_COUNTER=$HOSTS_COUNTER+1
   echo "Creating host: $HOSTS_COUNTER of $HOSTS_TO_CREATE"
   name=${NAME}-${HOSTS_COUNTER}
-  echo "Creating host with name $name"
+  echo "Creating host with name $name and labels $LABELS"
   DROPLET_ID=$(createHost $name $REGION $IMAGE $SIZE $SSH_KEY_ID)
 
   if [ -n $DROPLET_ID ]; then
@@ -54,6 +65,7 @@ while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
     if [ -n "$IP" ]; then
       DROPLET_HAS_IP="yes"
       addToHostsFile $(echo $IP | sed '/^\s*$/d')
+      registerHost $name $(echo $IP | sed '/^\s*$/d') $DROPLET_ID $LABELS
     fi
 
     if [ $DROPLET_HAS_IP = "no" ]; then
@@ -65,6 +77,7 @@ while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
           DROPLET_HAS_IP="yes"
           COUNTER=4
           addToHostsFile $(echo $IP | sed '/^\s*$/d')
+          registerHost $name $(echo $IP | sed '/^\s*$/d') $DROPLET_ID $LABELS
         fi
 
         if [ $COUNTER -eq "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; then

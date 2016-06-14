@@ -1,0 +1,158 @@
+#!/bin/bash
+
+# TODO: Enable X-Auth or Token auth
+#
+function errorTrap {
+  status=$?
+  echo "ERROR: Command exited with status $status."
+}
+
+function get() {
+  url=$1
+  curl --silent \
+    --show-error \
+    -X GET \
+    -H "Content-Type: application/json" \
+    -H "Accepts: application/json" \
+    $url
+}
+
+function post() {
+  url=$1
+  data=$2
+
+  curl --silent \
+    --show-error \
+    -X POST \
+    -H "Content-Type: application/json" \
+    --data "$data" $url
+}
+
+function delete() {
+  url=$1
+  curl --silent \
+    --show-error \
+    -X DELETE \
+    -H "Content-Type: application/json" \
+    -H "Accepts: application/json" \
+    $url
+}
+
+function usage() {
+  echo "hosts-registration [command] [base_url] [options]"
+  echo " "
+  echo "Available commands:"
+  echo "  get [id]            get one host"
+  echo "  create [options]    create a host"
+  echo "  all                 get all hosts"
+  echo "  labels [label]      get using a label filter"
+  echo "  delete [id]         delete a host"
+  echo " "
+}
+
+function getOneHost() {
+  set -e
+  set -u
+
+  id=$1
+
+  json=$(get ${BASE_URL}/api/v1/hosts/${id})
+  echo $json
+}
+
+function createHost() {
+  local OPTIND
+  while getopts "n:c:i:d:l:" OPTION; do
+    case "${OPTION}" in
+      n)
+        name=${OPTARG}
+        ;;
+      c)
+        cloud=${OPTARG}
+        ;;
+      i)
+        ip4=${OPTARG}
+        ;;
+      d)
+        id=${OPTARG}
+        ;;
+      l)
+        labels=${OPTARG}
+        ;;
+      *)
+        echo "";;
+    esac
+  done
+
+  set -e
+  set -u
+
+  processedLabel=""
+  for label in $(echo $labels | sed "s/,/ /g"); do
+    processedLabel=${processedLabel}\"${label}\",
+  done
+
+  labelsFormatted=$(echo $processedLabel | sed s'/.$//')
+
+  json=$(post "${BASE_URL}/api/v1/hosts" '{"name": "'"$name"'", "cloud": "'"$cloud"'", "ip4": "'"$ip4"'", "id": "'"$id"'", "labels": ['"$labelsFormatted"']}')
+  echo $json
+}
+
+function getAll() {
+  set -e
+  set -u
+
+  json=$(get ${BASE_URL}/api/v1/hosts)
+  echo $json
+}
+
+function getLabels() {
+  set -e
+  set -u
+
+  label=$1
+
+  json=$(get ${BASE_URL}/api/v1/labels/${label})
+  echo $json
+}
+
+function removeHost() {
+  set -e
+  set -u
+
+  id=$1
+  json=$(delete ${BASE_URL}/api/v1/hosts/$id)
+  echo $json
+}
+
+OPERATION=$1
+case $OPERATION in
+  get)
+    ID=$2
+    getOneHost $ID
+    ;;
+  create)
+    # Arguments needed
+    # name
+    # cloud
+    # ip4
+    # id
+    # labels
+    shift $((OPTIND))
+    createHost "$@"
+    ;;
+  all)
+    getAll
+    ;;
+  labels)
+    LABEL=$2
+    getLabels $LABEL
+    ;;
+  delete)
+    ID=$2
+    removeHost $ID
+    ;;
+  *)
+    usage
+    ;;
+esac

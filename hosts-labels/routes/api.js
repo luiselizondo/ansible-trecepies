@@ -28,6 +28,7 @@ router.get("/hosts/:id", function(req, res, next) {
 router.post("/hosts", function(req, res, next) {
   var body = req.body;
 
+  console.log(body);
   hosts.save(body, function(err, results) {
     if(err) {
       return res.status(406).json({error: err});
