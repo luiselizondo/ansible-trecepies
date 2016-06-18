@@ -52,9 +52,7 @@ TIMES_TO_RETRY=3
 HOSTS_COUNTER=0
 while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
   let HOSTS_COUNTER=$HOSTS_COUNTER+1
-  echo "Creating host: $HOSTS_COUNTER of $HOSTS_TO_CREATE"
   name=${NAME}-${HOSTS_COUNTER}
-  echo "Creating host with name $name and labels $LABELS"
   DROPLET_ID=$(createHost $name $REGION $IMAGE $SIZE $SSH_KEY_ID)
 
   if [ -n $DROPLET_ID ]; then
