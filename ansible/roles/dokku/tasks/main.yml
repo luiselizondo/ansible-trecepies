@@ -1,0 +1,30 @@
+- name: Add apt key
+  apt_key:
+    keyserver: "https://packagecloud.io/gpg.key"
+    state: present
+
+- name: Add dokku repository
+  lineinfile:
+    dest: /etc/apt/sources.list.d/dokku.list
+    line: deb https://packagecloud.io/dokku/dokku/ubuntu/ trusty main
+    insertafter: 'EOF'
+    state: present
+    create: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Running apt-get update
+  apt:
+    update_cache: yes
+
+- name: Install dokku
+  apt:
+    pkg: 'dokku'
+    state: present
+
+- name: Install docker-engine
+  apt:
+    pkg: 'docker-engine'
+    state: present
+
+- name: Install dokku dependencies
+  command: dokku plugin:install-dependencies --core
