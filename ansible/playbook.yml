@@ -11,3 +11,10 @@
   sudo: yes
   roles:
     - docker
+
+- name: install dokku
+  hosts: dokku_hosts
+  user: root
+  sudo: yes
+  roles:
+    - dokku

@@ -4,14 +4,27 @@ if [ -n $LIMIT_TO_HOSTS ]; then
   echo "LIMIT_TO_HOSTS is: ${LIMIT_TO_HOSTS}"
 fi
 
-HOSTS=`mktemp`
-echo "[all_hosts]" > $HOSTS
-for HOST in $LIMIT_TO_HOSTS
-do
-  echo $HOST >> $HOSTS
-done
+HOSTS_FILE=`mktemp`
 
-echo "Installing to: $(cat $HOSTS)"
+function runAnsibleOnHosts() {
+  for HOST in $LIMIT_TO_HOSTS
+  do
+    echo $HOST >> $HOSTS_FILE
+  done
+}
+
+if [ -n $HOSTS_GROUPS ]; then
+  for $HOST_GROUP in $HOSTS_GROUPS
+  do
+    echo "[${HOST_GROUP}]" > $HOSTS_FILE
+    runAnsibleOnHosts
+  done
+else
+  echo "[all_hosts]" > $HOSTS_FILE
+  runAnsibleOnHosts
+fi
+
+echo "Installing to: $(cat $HOSTS_FILE)"
 
 # TODO: Need to determine the hosts and save them to ansible/hosts or to a temp file
-ansible-playbook -i $HOSTS ansible/playbook.yml
+ansible-playbook -i $HOSTS_FILE ansible/playbook.yml
