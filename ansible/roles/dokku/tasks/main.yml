@@ -5,17 +5,18 @@
     id: 58118E89F3A912897C070ADBF76221572C52609D
 
 - name: Add dokku repository
-  lineinfile:
-    dest: /etc/apt/sources.list.d/dokku.list
-    line: deb https://packagecloud.io/dokku/dokku/ubuntu/ trusty main
-    insertafter: 'EOF'
+  apt_repository:
+    filename: /etc/apt/sources.list.d/dokku
+    repo: "deb https://packagecloud.io/dokku/dokku/ubuntu/ trusty main"
     state: present
-    create: yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    update_cache: yes
 
 - name: Running apt-get update
   apt:
     update_cache: yes
+    upgrade: dist
+    install_recommends: yes
+    allow_unauthenticated: yes
 
 - name: Install dokku
   apt:
