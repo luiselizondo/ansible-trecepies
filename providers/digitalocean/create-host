@@ -63,7 +63,7 @@ while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
     if [ -n "$IP" ]; then
       DROPLET_HAS_IP="yes"
       addToHostsFile $(echo $IP | sed '/^\s*$/d')
-      registerHost $name $(echo $IP | sed '/^\s*$/d') $DROPLET_ID $LABELS
+      registerHost $name $(echo $IP | sed '/^\s*$/d') $DROPLET_ID $LABELS > /dev/null 2>&1
     fi
 
     if [ $DROPLET_HAS_IP = "no" ]; then
@@ -75,7 +75,7 @@ while [ $HOSTS_COUNTER -lt $HOSTS_TO_CREATE ]; do
           DROPLET_HAS_IP="yes"
           COUNTER=4
           addToHostsFile $(echo $IP | sed '/^\s*$/d')
-          registerHost $name $(echo $IP | sed '/^\s*$/d') $DROPLET_ID $LABELS
+          registerHost $name $(echo $IP | sed '/^\s*$/d') $DROPLET_ID $LABELS > /dev/null 2>&1
         fi
 
         if [ $COUNTER -eq "$TIMES_TO_RETRY" ] && [ $DROPLET_HAS_IP = "no" ]; then
