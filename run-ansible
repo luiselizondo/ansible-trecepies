@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 HOSTS_FILE=`mktemp`
 function runAnsibleOnHosts() {
