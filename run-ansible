@@ -15,7 +15,7 @@ fi
 if [ -n "${HOSTS_GROUPS}" ]; then
   for HOST_GROUP in $HOSTS_GROUPS
   do
-    echo "[${HOST_GROUP}]" >> $HOSTS_FILE
+    echo "[${HOST_GROUP}_hosts]" >> $HOSTS_FILE
     runAnsibleOnHosts
   done
 else
