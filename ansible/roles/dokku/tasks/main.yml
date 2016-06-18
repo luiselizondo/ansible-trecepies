@@ -1,7 +1,8 @@
 - name: Add apt key
   apt_key:
-    keyserver: "https://packagecloud.io/gpg.key"
+    url: "https://packagecloud.io/gpg.key"
     state: present
+    id: 58118E89F3A912897C070ADBF76221572C52609D
 
 - name: Add dokku repository
   lineinfile:
