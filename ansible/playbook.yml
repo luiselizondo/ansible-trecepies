@@ -14,6 +14,11 @@
 
 - name: install dokku
   hosts: dokku_hosts
+  vars:
+    - dokku_version: "0.5.8"
+    - dokku_vhost: "{{ hostname }}"
+    - dokku_plugins: []
+    - sshkeys: []
   user: root
   sudo: yes
   roles:

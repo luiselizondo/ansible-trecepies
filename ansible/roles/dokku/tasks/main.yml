@@ -1,32 +1,32 @@
-- name: Add apt key
-  apt_key:
-    url: "https://packagecloud.io/gpg.key"
-    state: present
-    id: 58118E89F3A912897C070ADBF76221572C52609D
+- name: install apt packages
+  apt: pkg={{ item }} update_cache=yes
+  sudo: yes
+  with_items:
+    - git
+    - make
+    - curl
+    - software-properties-common
+    - man-db
+    - help2man
 
-- name: Add dokku repository
-  apt_repository:
-    filename: /etc/apt/sources.list.d/dokku
-    repo: "deb https://packagecloud.io/dokku/dokku/ubuntu/ trusty main"
-    state: present
-    update_cache: yes
+- name: clone dokku repository
+  git: "repo=https://github.com/progrium/dokku.git dest=/home/{{ ansible_ssh_user }}/dokku version=v{{ dokku_version }}"
+  sudo: yes
 
-- name: Running apt-get update
-  apt:
-    update_cache: yes
-    upgrade: dist
-    install_recommends: yes
-    allow_unauthenticated: yes
+- name: make install dokku
+  command: "make install chdir=/home/{{ ansible_ssh_user }}/dokku creates=/var/lib/dokku"
+  sudo: yes
 
-- name: Install dokku
-  apt:
-    pkg: 'dokku'
-    state: present
+- name: "Configure dokku vhost setting"
+  copy: "dest=/home/dokku/VHOST content={{ dokku_vhost }} owner=dokku group=root"
+  sudo: yes
 
-- name: Install docker-engine
-  apt:
-    pkg: 'docker-engine'
-    state: present
+- name: "Install plugins if specified"
+  git: "repo={{ item.repo }} dest=/var/lib/dokku/plugins/{{ item.name }} accept_hostkey=yes version={{ item.version|default('master') }}"
+  with_items: dokku_plugins
+  sudo: yes
 
-- name: Install dokku dependencies
-  command: dokku plugin:install-dependencies --core
+- name: "copy ssh keys of all users onto server"
+  sudo: yes
+  with_items: sshkeys
+  shell: echo "{{ item.value }}" | sshcommand acl-add dokku {{ item.name }}
