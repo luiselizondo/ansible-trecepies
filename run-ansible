@@ -1,17 +1,16 @@
 #!/bin/sh
 
-if [ -n $LIMIT_TO_HOSTS ]; then
-  echo "LIMIT_TO_HOSTS is: ${LIMIT_TO_HOSTS}"
-fi
-
 HOSTS_FILE=`mktemp`
-
 function runAnsibleOnHosts() {
   for HOST in $LIMIT_TO_HOSTS
   do
     echo $HOST >> $HOSTS_FILE
   done
 }
+
+if [ -n $LIMIT_TO_HOSTS ]; then
+  echo "LIMIT_TO_HOSTS is: ${LIMIT_TO_HOSTS}"
+fi
 
 if [ -n $HOSTS_GROUPS ]; then
   for $HOST_GROUP in $HOSTS_GROUPS
