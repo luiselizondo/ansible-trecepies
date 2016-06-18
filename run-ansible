@@ -8,12 +8,12 @@ function runAnsibleOnHosts() {
   done
 }
 
-if [ -n $LIMIT_TO_HOSTS ]; then
+if [ -n "${LIMIT_TO_HOSTS}" ]; then
   echo "LIMIT_TO_HOSTS is: ${LIMIT_TO_HOSTS}"
 fi
 
-if [ -n $HOSTS_GROUPS ]; then
-  for $HOST_GROUP in $HOSTS_GROUPS
+if [ -n "${HOSTS_GROUPS}" ]; then
+  for HOST_GROUP in $HOSTS_GROUPS
   do
     echo "[${HOST_GROUP}]" > $HOSTS_FILE
     runAnsibleOnHosts
