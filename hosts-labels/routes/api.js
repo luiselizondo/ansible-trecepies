@@ -64,6 +64,37 @@ router.get("/hosts/:id", function(req, res, next) {
   });
 });
 
+router.get("/ip4/:ip", function(req, res, next) {
+  var ip = req.params.ip;
+
+  hosts.getByIP(ip, function(err, result) {
+    if(err) {
+      return res.status(406).json({error: err});
+    }
+
+    if(req.accepts("application/json")) {
+      return res.status(200).json(result);
+    }
+    else if(req.accepts("text/plain")) {
+      res.setHeader("Content-Type", "text/plain");
+      var text = "";
+      text = "Host " + result.data.name + "\n" +
+      "ID:" + result.key + "\n" +
+      "Name: " + result.data.name + "\n" +
+      "Cloud: " + result.data.cloud + "\n" +
+      "IPv4: " + result.data.ip4 + "\n" +
+      "Host Id: " + result.data.id + "\n" +
+      "Labels: " + result.data.labels.join(", ") + "\n" +
+      "---";
+
+      return res.status(200).send(text);
+    }
+    else {
+      return res.status(200).json(result);
+    }
+  });
+});
+
 router.post("/hosts", function(req, res, next) {
   var body = req.body;
 
