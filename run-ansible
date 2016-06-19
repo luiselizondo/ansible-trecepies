@@ -1,26 +1,64 @@
 #!/bin/bash
 
+function errorTrap {
+  status=$?
+  echo "ERROR: Command exited with status $status."
+}
+
+if [ -z "${HOSTS_LABELS_SERVER_URL}" ]; then
+  trap errorTrap EXIT
+done
+
 HOSTS_FILE=`mktemp`
 function runAnsibleOnHosts() {
-  for HOST in $LIMIT_TO_HOSTS
+  hosts=$1
+  for HOST in $hosts
   do
     echo $HOST >> $HOSTS_FILE
   done
 }
 
-if [ -n "${LIMIT_TO_HOSTS}" ]; then
-  echo "LIMIT_TO_HOSTS is: ${LIMIT_TO_HOSTS}"
-fi
+function get() {
+  url=$1
+  curl --silent \
+    --show-error \
+    -X GET \
+    -H "Content-Type: application/json" \
+    -H "Accept: text/plain" \
+    $url
+}
 
-if [ -n "${HOSTS_GROUPS}" ]; then
+function getIPsUsingHostsGroups() {
+  hostGroup=$1
+  url="${HOSTS_LABELS_SERVER_URL}/api/v1/labels/${hostGroup}?only_return_ips=true"
+  get $url
+}
+
+if [ -n "${LIMIT_TO_HOSTS}" ] && [ -n "${HOSTS_GROUPS}" ]; then
+  # both LIMIT_TO_HOSTS and HOSTS_GROUPS are set
   for HOST_GROUP in $HOSTS_GROUPS
   do
     echo "[${HOST_GROUP}_hosts]" >> $HOSTS_FILE
-    runAnsibleOnHosts
+    runAnsibleOnHosts "${LIMIT_TO_HOSTS}"
+  done
+elif [ -n "${LIMIT_TO_HOSTS}" ] && [ -z "${HOSTS_GROUPS}" ]; then
+  # only LIMIT_TO_HOSTS and no HOSTS_GROUPS
+  echo "LIMIT_TO_HOSTS is: ${LIMIT_TO_HOSTS}"
+  # consider HOSTS_GROUP as all_hosts
+  echo "[all_hosts]" > $HOSTS_FILE
+  runAnsibleOnHosts "${LIMIT_TO_HOSTS}"
+elif [ -n "${HOSTS_GROUPS}" ] && [ -z "${LIMIT_TO_HOSTS}" ]; then
+  # only HOSTS_GROUPS is set and no LIMIT_TO_HOSTS
+  # need to get the IPs of the HOSTS with labels in each HOST_GROUPS
+  for HOST_GROUP in $HOSTS_GROUPS
+  do
+    echo "[${HOST_GROUP}_hosts]" >> $HOSTS_FILE
+    IPs=$(getIPsUsingHostsGroups $HOST_GROUP)
+    runAnsibleOnHosts "${IPs}"
   done
 else
-  echo "[all_hosts]" > $HOSTS_FILE
-  runAnsibleOnHosts
+  # nothing is set, return an error
+  trap errorTrap EXIT
 fi
 
 echo "Installing to: $(cat $HOSTS_FILE)"
