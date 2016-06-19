@@ -1,7 +1,9 @@
 var config = {};
+var path = require("path");
 
+var directory = path.join(__dirname, "../persistence/dev");
 config.persistence = {
-  directory: "../persistence/dev"
+  directory: directory
 }
 
 module.exports = config;

@@ -2,23 +2,25 @@ var should = require("should");
 var config = require("../config");
 var fs = require("fs");
 var hosts = require("../services/hosts.js");
+var rmdir = require('rmdir');
 
-function removePersistenceFiles(callback) {
-  fs.access(config.persistence.directory, fs.R_OK, function(err) {
-    if(err) return callback();
-
-    fs.unlink(config.persistence.directory, function(error) {
-      if(error) throw new Error(error);
-      return callback();
-    })
+function deleteFolderRecursive(filePath, done) { // make async
+  fs.access(filePath, function(err) {
+    if(err) return done(null);
+    rmdir(filePath, function (err, dirs, files) {
+      return done(err);
+    });
   })
-
-}
+};
 
 describe("Hosts persistence", function() {
 
-  afterEach(function(done) {
-    removePersistenceFiles(done);
+  beforeEach(function(done) {
+    deleteFolderRecursive(config.persistence.directory, done);
+  });
+
+  after(function(done) {
+    deleteFolderRecursive(config.persistence.directory, done);
   });
 
   describe("Validation", function() {
@@ -288,6 +290,46 @@ describe("Hosts persistence", function() {
           results[0].data.should.have.property("name", hostsValues[1].name);
           results[0].data.should.have.property("labels");
 
+          done();
+        });
+      });
+    });
+
+    it("Should return an object with the id of a virtual host given its IP", function(done) {
+      var hostsValues = [
+        {
+          cloud: "digitalocean",
+          id: "17269744",
+          ip4: "188.17.1.2",
+          name: "ubuntu-1",
+          labels: [
+            "web"
+          ]
+        },
+        {
+          cloud: "digitalocean",
+          id: "17269745",
+          ip4: "188.17.1.3",
+          name: "ubuntu-2",
+          labels: [
+            "web", "docker"
+          ]
+        },
+        {
+          cloud: "digitalocean",
+          id: "17269746",
+          ip4: "188.17.1.4",
+          name: "ubuntu-3",
+          labels: [
+            "docker"
+          ]
+        }
+      ];
+
+      hosts.save(hostsValues, function(err, result) {
+        hosts.getByIP("188.17.1.4", function(err, results) {
+          should.not.exist(err);
+          results.should.have.property("key", "digitalocean:17269746");
           done();
         });
       });

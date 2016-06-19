@@ -108,8 +108,22 @@ hosts.get = function(id, callback) {
     }
 
     return callback(err, result);
-  })
-}
+  });
+};
+
+hosts.getByIP = function(ip, callback) {
+  var storage = init();
+
+  var validHost = {};
+  storage.forEach(function(key, value) {
+    if(value.ip4 === ip) {
+      validHost.key = value.cloud + ":" + value.id;
+      validHost.data = value;
+    }
+  });
+
+  return callback(null, validHost);
+};
 
 hosts.getWithLabel = function(label, callback) {
   var storage = init();
