@@ -137,17 +137,32 @@ router.get("/labels/:label", function(req, res, next) {
     }
     else if(req.accepts("text/plain")) {
       res.setHeader("Content-Type", "text/plain");
+
       var text = "";
-      _.each(results, function(result) {
-        text = "Host " + result.data.name + "\n" +
-        "ID: " + result.key + "\n" +
-        "Name: " + result.data.name + "\n" +
-        "Cloud: " + result.data.cloud + "\n" +
-        "IPv4: " + result.data.ip4 + "\n" +
-        "Host id: " + result.data.id + "\n" +
-        "Labels: " + result.data.labels.join(", ") + "\n" +
-        "---";
-      });
+      if(req.query.only_return_ips) {
+        _.each(results, function(result, key) {
+          if(key+1 == results.length) {
+            text = text + result.data.ip4;
+          }
+          else {
+            text = text + result.data.ip4 + " ";
+          }
+        });
+      }
+      else {
+        _.each(results, function(result) {
+          text = "Host " + result.data.name + "\n" +
+          "ID: " + result.key + "\n" +
+          "Name: " + result.data.name + "\n" +
+          "Cloud: " + result.data.cloud + "\n" +
+          "IPv4: " + result.data.ip4 + "\n" +
+          "Host id: " + result.data.id + "\n" +
+          "Labels: " + result.data.labels.join(", ") + "\n" +
+          "---";
+        });
+      }
+
+
       return res.status(200).send(text);
     }
     else {
