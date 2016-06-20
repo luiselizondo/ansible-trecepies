@@ -7,7 +7,7 @@ function errorTrap {
 
 if [ -z "${HOSTS_LABELS_SERVER_URL}" ]; then
   trap errorTrap EXIT
-done
+fi
 
 HOSTS_FILE=`mktemp`
 function runAnsibleOnHosts() {
