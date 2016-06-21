@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 GITHUB_PROJECT_NAME=${GIT_URL#https://github.com}
 APP_NAME=$(echo $GITHUB_PROJECT_NAME | sed 's|^.*/||g' | sed 's|.git||g')
 echo $APP_NAME
@@ -13,8 +15,11 @@ ln -s $HOME/.dokku/contrib/dokku_client.sh /usr/local/bin/dokku
 git clone $GIT_URL
 cd $APP_NAME
 
+echo "Create app $APP_NAME"
 dokku apps:create $APP_NAME
 
+echo "Adding remote"
 git remote add dokku dokku@$CLIENT_IP:$APP_NAME
 
+echo "Pushing"
 git push dokku master
