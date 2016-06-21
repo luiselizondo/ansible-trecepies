@@ -9,6 +9,7 @@ DOCKERFILE_INJECTED=`mktemp`
 cat $DOCKERFILE > $DOCKERFILE_INJECTED
 cat $FILE_TO_INJECT >> $DOCKERFILE_INJECTED
 
-cat $DOCKERFILE_INJECTED
+cp $DOCKERFILE_INJECTED ./Dockerfile.temp
 
-docker build -f $DOCKERFILE_INJECTED --tag $TAG .
+docker build -f Dockerfile.temp --tag $TAG .
+rm Dockerfile.temp
