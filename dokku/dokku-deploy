@@ -3,6 +3,12 @@
 set -u
 set -e
 
+git clone git@github.com:dokku/dokku.git ~/.dokku
+cd ~/.dokku
+git checkout v0.6.2
+
+ln -s $HOME/.dokku/contrib/dokku_client.sh /usr/local/bin/dokku
+
 git clone $GIT_URL
 
 GITHUB_PROJECT_NAME=${GIT_URL#https://github.com}
