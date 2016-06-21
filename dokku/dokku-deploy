@@ -2,6 +2,7 @@
 
 set -x
 
+URL=$GIT_URL
 GITHUB_PROJECT_NAME=${GIT_URL#https://github.com}
 APP_NAME=$(echo $GITHUB_PROJECT_NAME | sed 's|^.*/||g' | sed 's|.git||g')
 echo $APP_NAME
@@ -12,6 +13,7 @@ git checkout tags/v0.6.2
 
 ln -s $HOME/.dokku/contrib/dokku_client.sh /usr/local/bin/dokku
 
+echo "Clogning $URL"
 git clone $GIT_URL
 cd $APP_NAME
 
