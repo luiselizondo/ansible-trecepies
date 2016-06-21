@@ -9,7 +9,7 @@ echo $APP_NAME
 
 git clone https://github.com/dokku/dokku.git ~/.dokku
 cd ~/.dokku
-git checkout git checkout tags/v0.6.2
+git checkout tags/v0.6.2
 
 ln -s $HOME/.dokku/contrib/dokku_client.sh /usr/local/bin/dokku
 
