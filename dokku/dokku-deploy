@@ -5,7 +5,7 @@ set -e
 
 git clone https://github.com/dokku/dokku.git ~/.dokku
 cd ~/.dokku
-git checkout v0.6.2
+git checkout -b v0.6.2 origin/v0.6.2
 
 ln -s $HOME/.dokku/contrib/dokku_client.sh /usr/local/bin/dokku
 
