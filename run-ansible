@@ -63,5 +63,4 @@ fi
 
 echo "Installing to: $(cat $HOSTS_FILE)"
 
-# TODO: Need to determine the hosts and save them to ansible/hosts or to a temp file
-ansible-playbook -i $HOSTS_FILE ansible/playbook.yml
+ansible-playbook -i $HOSTS_FILE ansible/playbook.yml "$@"
