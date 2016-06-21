@@ -11,4 +11,4 @@ cat $FILE_TO_INJECT >> $DOCKERFILE_INJECTED
 
 cat $DOCKERFILE_INJECTED
 
-docker build --tag $TAG -f $DOCKERFILE_INJECTED .
+docker build -f $DOCKERFILE_INJECTED --tag $TAG .
