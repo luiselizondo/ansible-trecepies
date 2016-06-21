@@ -9,24 +9,34 @@
     - man-db
     - help2man
 
-- name: clone dokku repository
-  git: "repo=https://github.com/progrium/dokku.git dest=/home/{{ ansible_ssh_user }}/dokku version=v{{ dokku_version }}"
+- name: "Get dokku installation file"
+  get_url:
+    url: https://raw.githubusercontent.com/dokku/dokku/v0.6.1/bootstrap.sh
+    dest: /tmp/bootstrap.sh
+
+- name: Execute installation
+  environment:
+    DOKKU_TAG: v0.6.1
+  command: bash /tmp/bootstrap.sh
+  args:
+    creates: /home/dokku/dokku-installed
   become_user: root
 
-- name: make install dokku
-  command: "make install chdir=/home/{{ ansible_ssh_user }}/dokku creates=/var/lib/dokku"
-  become_user: root
+- name: "stop the dokku-installer service"
+  service:
+    name: dokku-installer
+    state: stopped
 
-# - name: "Configure dokku vhost setting"
-#   copy: "dest=/home/dokku/VHOST content={{ dokku_vhost }} owner=dokku group=root"
-#   sudo: yes
+- name: "Configure dokku vhost setting"
+  copy: "dest=/home/dokku/VHOST content={{ dokku_vhost }} owner=dokku group=root"
+  become_user: root
 
 - name: "Install plugins if specified"
   git: "repo={{ item.repo }} dest=/var/lib/dokku/plugins/{{ item.name }} accept_hostkey=yes version={{ item.version|default('master') }}"
-  with_items: dokku_plugins
+  with_items: '{{dokku_plugins}}'
   become_user: root
 
 - name: "copy ssh keys of all users onto server"
   become_user: root
-  with_items: sshkeys
+  with_items: '{{sshkeys}}'
   shell: echo "{{ item.value }}" | sshcommand acl-add dokku {{ item.name }}

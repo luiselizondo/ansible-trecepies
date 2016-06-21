@@ -1,14 +1,14 @@
 - name: install common software
   hosts: all_hosts
   user: root
-  sudo: yes
+  become_user: root
   roles:
     - all
 
 - name: install docker
   hosts: docker_hosts
   user: root
-  sudo: yes
+  become_user: root
   roles:
     - docker
 
@@ -16,10 +16,10 @@
   hosts: dokku_hosts
   vars:
     - dokku_version: "0.5.8"
-    - dokku_vhost: "{{ hostname }}"
+    - dokku_vhost: "{{ ansible_hostname }}"
     - dokku_plugins: []
     - sshkeys: []
   user: root
-  sudo: yes
+  become_user: root
   roles:
     - dokku
