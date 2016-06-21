@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -u
+set -e
+
+git clone $GIT_URL
+
+GITHUB_PROJECT_NAME=${GIT_URL#https://github.com}
+
+APP_NAME=$(echo $GITHUB_PROJECT_NAME | sed 's|^.*/||g' | sed 's|.git||g')
+echo $APP_NAME
+
+dokku apps:create $APP_NAME
+
+git remote add dokku dokku@$CLIENT_IP:$APP_NAME
+
+git push dokku master
