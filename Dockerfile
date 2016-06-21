@@ -36,6 +36,7 @@ COPY ansible/ansible.cfg /etc/ansible/ansible.cfg
 COPY ansible /opt/ansible
 COPY run-ansible /opt/run-ansible
 COPY providers /opt/providers
+COPY dokku /opt/dokku
 COPY scripts /opt
 EXPOSE 22
 CMD /opt/start-sshd
