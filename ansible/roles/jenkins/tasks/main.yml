@@ -20,11 +20,9 @@
     repo: https://github.com/luiselizondo/automation-recipes.git
     dest: /tmp/automation-recipes
 
-- name: Build the Docker runner image
-  docker_image:
-    path: /tmp/automation-recipes
-    name: runner
-    tag: latest
+- name: Install docker-py using pip
+  pip:
+    name: docker-py
 
 - name: Append the user jenkins to the group docker
   user:
@@ -46,3 +44,12 @@
   service:
     name: docker
     state: restarted
+
+- name: Print Jenkins password
+  command: cat /var/lib/jenkins/secrets/initialAdminPassword
+
+- name: Build the Docker runner image
+  docker_image:
+    path: /tmp/automation-recipes
+    name: runner
+    tag: latest

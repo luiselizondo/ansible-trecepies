@@ -16,11 +16,10 @@
 - name: Add docker repository
   lineinfile:
     dest: /etc/apt/sources.list.d/docker.list
-    line: deb https://apt.dockerproject.org/repo ubuntu-trusty main
+    line: deb https://apt.dockerproject.org/repo ubuntu-xenial main
     insertafter: 'EOF'
     state: present
     create: yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Running apt-get update
   apt:
