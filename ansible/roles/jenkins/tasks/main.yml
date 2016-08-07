@@ -1,0 +1,48 @@
+- name: Check if jenkins is installed
+  command: dpkg-query -W jenkins
+  register: jenkins_check_deb
+  failed_when: jenkins_check_deb.rc > 1
+  changed_when: jenkins_check_deb.rc == 1
+
+- name: Get Jenkins file
+  get_url:
+    url: http://pkg.jenkins-ci.org/debian-stable/binary/jenkins_2.7.2_all.deb
+    dest: /tmp/jenkins_2.7.2_all.deb
+  when: jenkins_check_deb.rc == 1
+
+- name: Install Jenkins
+  apt: deb="/tmp/jenkins_2.7.2_all.deb"
+  sudo: true
+  when: jenkins_check_deb.rc == 1
+
+- name: Clone the automation-recepies git project
+  git:
+    repo: https://github.com/luiselizondo/automation-recipes.git
+    dest: /tmp/automation-recipes
+
+- name: Build the Docker runner image
+  docker_image:
+    path: /tmp/automation-recipes
+    name: runner
+    tag: latest
+
+- name: Append the user jenkins to the group docker
+  user:
+    name: jenkins
+    groups: docker
+    append: yes
+
+- name: Creates directory /opt/app/jenkins/docker
+  file:
+    path: /opt/app/jenkins/docker
+    state: directory
+
+- name: Edit the /etc/default/docker file
+  lineinfile:
+    dest: /etc/default/docker
+    line: "DOCKER_OPTS=' --host=unix:///var/run/docker.sock --restart=false -g /opt/app/jenkins/docker -G jenkins'"
+
+- name: Restart docker
+  service:
+    name: docker
+    state: restarted

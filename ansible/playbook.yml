@@ -1,13 +1,13 @@
 - name: install common software
   hosts: all_hosts
-  user: root
+  become: true
   become_user: root
   roles:
-    - all
+    - common
 
 - name: install docker
   hosts: docker_hosts
-  user: root
+  become: true
   become_user: root
   roles:
     - docker
@@ -19,7 +19,19 @@
     - dokku_vhost: "{{ ansible_hostname }}"
     - dokku_plugins: []
     - sshkeys: []
-  user: root
+  become: true
   become_user: root
   roles:
     - dokku
+
+- name: install jenkins
+  hosts: jenkins_hosts
+  become: true
+  become_user: root
+  gather_facts: no
+  roles:
+    - common
+    - jenkins
+    - docker
+  pre_tasks:
+    - raw: sudo apt-get -y install python-simplejson

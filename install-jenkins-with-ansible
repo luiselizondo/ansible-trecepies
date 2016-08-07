@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+set -u
+
+JENKINS_IP=$1
+PATH_TO_PRIVATE_KEY=$2
+
+function errorTrap {
+  status=$?
+  echo "ERROR: Command exited with status $status."
+}
+
+HOSTS_FILE=$(mktemp)
+function runAnsibleOnHosts() {
+  hosts=$1
+  for HOST in $hosts
+  do
+    echo $HOST >> $HOSTS_FILE
+  done
+}
+
+echo "[jenkins_hosts]" > $HOSTS_FILE
+runAnsibleOnHosts "${JENKINS_IP}"
+
+ansible-playbook -i $HOSTS_FILE ${PWD}/ansible/playbook.yml -c paramiko --user=root --private-key=$PATH_TO_PRIVATE_KEY
