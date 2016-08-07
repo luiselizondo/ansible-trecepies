@@ -17,12 +17,16 @@ RUN apt-get dist-upgrade -y && \
     apt-get autoremove -y
 
 RUN ( echo ubuntu ; echo ubuntu ) | passwd root
+RUN useradd -m -d /home/jenkins -s /bin/sh jenkins && \
+    echo "jenkins:jenkins" | chpasswd
 # not very useful until it can run sudo commands
 # RUN ( echo ubuntu ; echo ubuntu ) | passwd jenkins
 
 RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication .*/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 RUN sed -i 's/UsePAM .*/UsePAM no/g' /etc/ssh/sshd_config
+RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd
+
 
 RUN mkdir -p /root/.ssh && \
     touch /root/.ssh/config && \
