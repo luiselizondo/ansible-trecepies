@@ -51,6 +51,11 @@
 
 - debug: msg="{{ jenkinsPassword.stdout_lines }}"
 
+- name: Restart jenkins
+  service:
+    name: jenkins
+    state: restarted
+
 - name: Build the Docker runner image
   docker_image:
     path: /tmp/automation-recipes
