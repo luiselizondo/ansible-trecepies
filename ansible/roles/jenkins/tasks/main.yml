@@ -47,6 +47,9 @@
 
 - name: Print Jenkins password
   command: cat /var/lib/jenkins/secrets/initialAdminPassword
+  register: jenkinsPassword
+
+- debug: msg="{{ jenkinsPassword.stdout_lines }}"
 
 - name: Build the Docker runner image
   docker_image:

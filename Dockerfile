@@ -12,6 +12,9 @@ RUN apt-get dist-upgrade -y && \
     apt-get -y install ansible openssh-server git curl python openjdk-7-jdk && \
     curl -L https://github.com/digitalocean/doctl/releases/download/v1.1.0/doctl-1.1.0-linux-amd64.tar.gz  | tar xz && \
     mv ./doctl /usr/local/bin && \
+    curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" \
+    unzip awscli-bundle.zip \
+    ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     apt-get autoremove -y
 
