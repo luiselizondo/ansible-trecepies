@@ -35,3 +35,11 @@
   apt:
     pkg: 'docker-engine'
     state: present
+
+- name: Configure systemd for docker-engine
+  copy:
+    src: roles/docker/files/docker.service
+    dest: /lib/systemd/system/docker.service
+    owner: root
+    group: root
+    mode: 0644
