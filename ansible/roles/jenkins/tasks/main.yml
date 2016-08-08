@@ -72,5 +72,3 @@
     name: runner-first
     state: started
     image: local/runner
-    privileged: yes
-    published_ports: yes
