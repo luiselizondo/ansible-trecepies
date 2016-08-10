@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# List of optimized AMI that work with ECS
+# us-east-1 amzn-ami-2016.03.f-amazon-ecs-optimized ami-c17ce0d6
+# us-west-1 amzn-ami-2016.03.f-amazon-ecs-optimized ami-b74b08d7
+# us-west-2	amzn-ami-2016.03.f-amazon-ecs-optimized ami-f3468e93
+# eu-west-1 amzn-ami-2016.03.f-amazon-ecs-optimized ami-12ea8261
+# eu-central-1 amzn-ami-2016.03.f-amazon-ecs-optimized ami-3bf10754
+# ap-northeast-1 amzn-ami-2016.03.f-amazon-ecs-optimized ami-ed26e78c
+# ap-southeast-1 amzn-ami-2016.03.f-amazon-ecs-optimized ami-032af460
+# ap-southeast-2 amzn-ami-2016.03.f-amazon-ecs-optimized ami-a1281cc2
+# Source: http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_AWSCLI.html#AWSCLI_launch_container_instance
+
+COUNT=${HOW_MANY_IMAGES}
+AWS_INSTANCE_TYPE=${INSTANCE_TYPE}
+AWS_KEY_PAIR_NAME=${KEY_PAIR_NAME}
+AWS_SECURITY_GROUP_NAME=${SECURITY_GROUP_NAME}
+
+IMAGE_ID_OF_US_EAST_1=ami-c17ce0d6
+IMAGE_ID_OF_US_WEST_1=ami-b74b08d7
+IMAGE_ID_OF_US_WEST_2=ami-f3468e93
+IMAGE_ID_OF_EU_WEST_1=ami-12ea8261
+IMAGE_ID_OF_EU_CENTRAL_1=ami-3bf10754
+IMAGE_ID_OF_AP_NORTHEAST_1=ami-ed26e78c
+IMAGE_ID_OF_AP_SOUTHEAST_1=ami-032af460
+IMAGE_ID_OF_AP_SOUTHEAST_2=ami-a1281cc2
+
+IMAGE_ID=""
+case $AWS_DEFAULT_REGION in
+  us-east-1)
+    IMAGE_ID=$IMAGE_ID_OF_US_EAST_1
+  ;;
+  us-west-1)
+    IMAGE_ID=$IMAGE_ID_OF_US_WEST_1
+  ;;
+  us-west-2)
+    IMAGE_ID=$IMAGE_ID_OF_US_WEST_2
+  ;;
+  eu-west-1)
+    IMAGE_ID=$IMAGE_ID_OF_EU_WEST_1
+  ;;
+  eu-central-1)
+    IMAGE_ID=$IMAGE_ID_OF_EU_CENTRAL_1
+  ;;
+  ap-northeast-1)
+    IMAGE_ID=$IMAGE_ID_OF_AP_NORTHEAST_1
+  ;;
+  ap-southeast-1)
+    IMAGE_ID=$IMAGE_ID_OF_AP_SOUTHEAST_1
+  ;;
+  ap-southeast-2)
+    IMAGE_ID=IMAGE_ID_OF_AP_SOUTHEAST_2
+  ;;
+  *)
+    IMAGE_ID=$IMAGE_ID_OF_US_EAST_1
+  ;;
+esac
+
+aws ec2 run-instances \
+  --image-id $IMAGE_ID \
+  --count $COUNT \
+  --instance-type $AWS_INSTANCE_TYPE \
+  --key-name $AWS_KEY_PAIR_NAME \
+  --security-groups $AWS_SECURITY_GROUP_NAME

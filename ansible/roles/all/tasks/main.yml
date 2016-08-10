@@ -1,4 +1,0 @@
-- name: Install vim
-  apt:
-    pkg: 'vim'
-    state: present

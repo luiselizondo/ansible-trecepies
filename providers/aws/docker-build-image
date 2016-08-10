@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+set -u
+
+IMAGE_NAME=$1
+
+docker build --tag=${IMAGE_NAME}:${BUILD_NAME} .

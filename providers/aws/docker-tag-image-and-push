@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+set -u
+
+IMAGE_ID=$1
+AMAZON_REGISTRY_URL=$2
+IMAGE_NAME=$3
+
+function getDockerLoginCommand() {
+  DOCKER_LOGIN_COMMAND=$(aws ecr get-login)
+  echo $DOCKER_LOGIN_COMMAND
+}
+
+docker tag ${IMAGE_ID} ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}
+
+exec getDockerLoginCommand
+
+docker push ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}

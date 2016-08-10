@@ -4,7 +4,7 @@ MAINTAINER Luis Elizondo <lelizondo@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update
+RUN apt-get update --fix-missing
 RUN apt-get dist-upgrade -y && \
     apt-get install -y software-properties-common && \
     apt-add-repository ppa:ansible/ansible && \
@@ -33,6 +33,9 @@ RUN mkdir -p /root/.ssh && \
     echo "Host *" >> /root/.ssh/config && \
     echo "StrictHostKeyChecking no" >> /root/.ssh/config && \
     echo "UserKnownHostsFile=/dev/null" >> /root/.ssh/config
+
+RUN mkdir -p /root/.aws
+COPY files/aws-config-file /root/.aws/config
 
 COPY ansible/ansible.cfg /etc/ansible/ansible.cfg
 COPY ansible /opt/ansible
