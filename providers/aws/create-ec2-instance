@@ -11,6 +11,9 @@
 # ap-southeast-2 amzn-ami-2016.03.f-amazon-ecs-optimized ami-a1281cc2
 # Source: http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_AWSCLI.html#AWSCLI_launch_container_instance
 
+set -e
+set -u
+
 COUNT=${HOW_MANY_IMAGES}
 AWS_INSTANCE_TYPE=${INSTANCE_TYPE}
 AWS_KEY_PAIR_NAME=${KEY_PAIR_NAME}
