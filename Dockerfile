@@ -41,4 +41,4 @@ COPY providers /opt/providers
 COPY dokku /opt/dokku
 COPY scripts /opt
 EXPOSE 22
-ENTRYPOINT ["/opt/start-sshd"]
+CMD ["/opt/start-sshd"]
