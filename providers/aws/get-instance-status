@@ -9,4 +9,4 @@ OUTPUT=`mktemp`
 aws ec2 describe-instance-status \
   --instance-ids $INSTANCE_ID | tee $OUTPUT
 
-result=$(parse-get-instance-status-result $OUTPUT)
+result=$(./parse-get-instance-status-result $OUTPUT)

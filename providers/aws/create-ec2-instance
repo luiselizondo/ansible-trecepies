@@ -89,7 +89,7 @@ aws ec2 run-instances \
   --subnet-id $AWS_SUBNET_ID | tee $OUTPUT
 
 
-instancesIds=$(parse-created-instance-result-and-get-instance-id $OUTPUT)
+instancesIds=$(./parse-created-instance-result-and-get-instance-id $OUTPUT)
 
 for instanceId in $instancesIds do
   waitForInstanceStatus $instanceId
