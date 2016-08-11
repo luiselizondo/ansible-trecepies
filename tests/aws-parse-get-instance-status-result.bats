@@ -1,0 +1,11 @@
+#!/usr/bin/env bats
+
+@test "AWS: Parse get instance status result" {
+  result=$(providers/aws/parse-get-instance-status-result tests/helpers/aws-response-when-getting-a-running-instance-status.json)
+  [ "$result" = "running" ]
+}
+
+@test "AWS: Parse get instance status result" {
+  result=$(providers/aws/parse-get-instance-status-result tests/helpers/aws-response-when-getting-a-pending-instance-status.json)
+  [ "$result" = "pending" ]
+}

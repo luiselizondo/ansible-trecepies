@@ -1,0 +1,30 @@
+{
+    "InstanceStatuses": [
+        {
+            "InstanceId": "i-d5aa362d",
+            "InstanceState": {
+                "Code": 16,
+                "Name": "pending"
+            },
+            "AvailabilityZone": "us-east-1e",
+            "SystemStatus": {
+                "Status": "ok",
+                "Details": [
+                    {
+                        "Status": "passed",
+                        "Name": "reachability"
+                    }
+                ]
+            },
+            "InstanceStatus": {
+                "Status": "ok",
+                "Details": [
+                    {
+                        "Status": "passed",
+                        "Name": "reachability"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -27,6 +27,9 @@ RUN sed -i 's/#PasswordAuthentication .*/PasswordAuthentication yes/g' /etc/ssh/
 RUN sed -i 's/UsePAM .*/UsePAM no/g' /etc/ssh/sshd_config
 RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pam_loginuid.so|g' /etc/pam.d/sshd
 
+RUN git clone https://github.com/sstephenson/bats.git && \
+    cd bats && \
+    ./install.sh /usr/local
 
 RUN mkdir -p /root/.ssh && \
     touch /root/.ssh/config && \

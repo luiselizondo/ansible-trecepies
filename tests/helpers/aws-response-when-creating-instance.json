@@ -1,0 +1,163 @@
+{
+    "OwnerId": "880416032174",
+    "ReservationId": "r-7af1cf83",
+    "Groups": [],
+    "Instances": [
+        {
+            "Monitoring": {
+                "State": "disabled"
+            },
+            "PublicDnsName": "",
+            "RootDeviceType": "ebs",
+            "State": {
+                "Code": 0,
+                "Name": "pending"
+            },
+            "EbsOptimized": false,
+            "LaunchTime": "2016-08-11T00:30:53.000Z",
+            "PrivateIpAddress": "172.30.3.96",
+            "ProductCodes": [],
+            "VpcId": "vpc-380e655f",
+            "StateTransitionReason": "",
+            "InstanceId": "i-af51cd57",
+            "ImageId": "ami-c17ce0d6",
+            "PrivateDnsName": "ip-172-30-3-96.ec2.internal",
+            "KeyName": "Jenkins",
+            "SecurityGroups": [
+                {
+                    "GroupName": "default",
+                    "GroupId": "sg-d2e11aa8"
+                }
+            ],
+            "ClientToken": "",
+            "SubnetId": "subnet-5f475162",
+            "InstanceType": "t2.micro",
+            "NetworkInterfaces": [
+                {
+                    "Status": "in-use",
+                    "MacAddress": "06:68:fb:66:21:9b",
+                    "SourceDestCheck": true,
+                    "VpcId": "vpc-380e655f",
+                    "Description": "",
+                    "NetworkInterfaceId": "eni-24989328",
+                    "PrivateIpAddresses": [
+                        {
+                            "Primary": true,
+                            "PrivateIpAddress": "172.30.3.96"
+                        }
+                    ],
+                    "Attachment": {
+                        "Status": "attaching",
+                        "DeviceIndex": 0,
+                        "DeleteOnTermination": true,
+                        "AttachmentId": "eni-attach-f4221d0d",
+                        "AttachTime": "2016-08-11T00:30:53.000Z"
+                    },
+                    "Groups": [
+                        {
+                            "GroupName": "default",
+                            "GroupId": "sg-d2e11aa8"
+                        }
+                    ],
+                    "SubnetId": "subnet-5f475162",
+                    "OwnerId": "880416032174",
+                    "PrivateIpAddress": "172.30.3.96"
+                }
+            ],
+            "SourceDestCheck": true,
+            "Placement": {
+                "Tenancy": "default",
+                "GroupName": "",
+                "AvailabilityZone": "us-east-1e"
+            },
+            "Hypervisor": "xen",
+            "BlockDeviceMappings": [],
+            "Architecture": "x86_64",
+            "StateReason": {
+                "Message": "pending",
+                "Code": "pending"
+            },
+            "RootDeviceName": "/dev/xvda",
+            "VirtualizationType": "hvm",
+            "AmiLaunchIndex": 0
+        },
+        {
+            "Monitoring": {
+                "State": "disabled"
+            },
+            "PublicDnsName": "",
+            "RootDeviceType": "ebs",
+            "State": {
+                "Code": 0,
+                "Name": "pending"
+            },
+            "EbsOptimized": false,
+            "LaunchTime": "2016-08-11T00:30:53.000Z",
+            "PrivateIpAddress": "172.30.3.96",
+            "ProductCodes": [],
+            "VpcId": "vpc-380e655f",
+            "StateTransitionReason": "",
+            "InstanceId": "i-af51cd58",
+            "ImageId": "ami-c17ce0d6",
+            "PrivateDnsName": "ip-172-30-3-96.ec2.internal",
+            "KeyName": "Jenkins",
+            "SecurityGroups": [
+                {
+                    "GroupName": "default",
+                    "GroupId": "sg-d2e11aa8"
+                }
+            ],
+            "ClientToken": "",
+            "SubnetId": "subnet-5f475162",
+            "InstanceType": "t2.micro",
+            "NetworkInterfaces": [
+                {
+                    "Status": "in-use",
+                    "MacAddress": "06:68:fb:66:21:9b",
+                    "SourceDestCheck": true,
+                    "VpcId": "vpc-380e655f",
+                    "Description": "",
+                    "NetworkInterfaceId": "eni-24989328",
+                    "PrivateIpAddresses": [
+                        {
+                            "Primary": true,
+                            "PrivateIpAddress": "172.30.3.96"
+                        }
+                    ],
+                    "Attachment": {
+                        "Status": "attaching",
+                        "DeviceIndex": 0,
+                        "DeleteOnTermination": true,
+                        "AttachmentId": "eni-attach-f4221d0d",
+                        "AttachTime": "2016-08-11T00:30:53.000Z"
+                    },
+                    "Groups": [
+                        {
+                            "GroupName": "default",
+                            "GroupId": "sg-d2e11aa8"
+                        }
+                    ],
+                    "SubnetId": "subnet-5f475162",
+                    "OwnerId": "880416032174",
+                    "PrivateIpAddress": "172.30.3.96"
+                }
+            ],
+            "SourceDestCheck": true,
+            "Placement": {
+                "Tenancy": "default",
+                "GroupName": "",
+                "AvailabilityZone": "us-east-1e"
+            },
+            "Hypervisor": "xen",
+            "BlockDeviceMappings": [],
+            "Architecture": "x86_64",
+            "StateReason": {
+                "Message": "pending",
+                "Code": "pending"
+            },
+            "RootDeviceName": "/dev/xvda",
+            "VirtualizationType": "hvm",
+            "AmiLaunchIndex": 0
+        }
+    ]
+}

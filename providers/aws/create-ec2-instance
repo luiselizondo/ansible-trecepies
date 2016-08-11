@@ -18,6 +18,7 @@ COUNT=${HOW_MANY_IMAGES}
 AWS_INSTANCE_TYPE=${INSTANCE_TYPE}
 AWS_KEY_PAIR_NAME=${KEY_PAIR_NAME}
 AWS_SECURITY_GROUP_NAME=${SECURITY_GROUP_NAME}
+AWS_SUBNET_ID=${SUBNET_ID}
 
 IMAGE_ID_OF_US_EAST_1=ami-c17ce0d6
 IMAGE_ID_OF_US_WEST_1=ami-b74b08d7
@@ -59,9 +60,37 @@ case $AWS_DEFAULT_REGION in
   ;;
 esac
 
+function waitForInstanceStatus() {
+  instanceId=$1
+
+  status=$(./get-instance-status $instanceId)
+  if [ "${status}" = "running" ]; then
+    echo "Instance with id $instanceId is ${status}"
+    exit 0
+  else
+    sleep 10
+    echo "Instance with id $instanceId is ${status}"
+    waitForInstanceStatus $instanceId
+  fi
+}
+
+# Filter out invalid types of machines or create a list of valid machines
+# Create subnet if neccesary
+
+OUTPUT=`mktemp`
+
+export AWS_DEFAULT_OUTPUT="json"
+
 aws ec2 run-instances \
   --image-id $IMAGE_ID \
   --count $COUNT \
   --instance-type $AWS_INSTANCE_TYPE \
   --key-name $AWS_KEY_PAIR_NAME \
-  --security-groups $AWS_SECURITY_GROUP_NAME
+  --subnet-id $AWS_SUBNET_ID | tee $OUTPUT
+
+
+instancesIds=$(parse-created-instance-result-and-get-instance-id $OUTPUT)
+
+for instanceId in $instancesIds do
+  waitForInstanceStatus $instanceId
+done

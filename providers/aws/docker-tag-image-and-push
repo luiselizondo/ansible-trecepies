@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# TODO: Know if the repository is already created and decide
+#       There's no sense in having the user create the repository first
 
 set -e
 set -u
