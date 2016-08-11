@@ -10,7 +10,11 @@ def main():
     data = json.load(jsonFile)
 
     instances = data["InstanceStatuses"]
-    print(instances[0]["InstanceState"]["Name"])
+
+    if 0 in instances:
+      print(instances[0]["InstanceState"]["Name"])
+    else:
+      print("pending")
 
 if __name__ == "__main__":
   main()

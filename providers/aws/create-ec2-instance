@@ -60,17 +60,20 @@ case $AWS_DEFAULT_REGION in
   ;;
 esac
 
-function waitForInstanceStatus() {
-  instanceId=$1
+function removeSpacesFromString() {
+  STRING=$1
+  STRING_WITH_NO_SPACE="$(echo -e "${STRING}" | xargs)"
+  echo $STRING_WITH_NO_SPACE
+}
 
-  status=$(./get-instance-status $instanceId)
+function waitForInstanceStatus() {
+  instanceId=$(removeSpacesFromString $1)
+
+  status=$(/opt/providers/aws/get-instance-status ${instanceId})
   if [ "${status}" = "running" ]; then
-    echo "Instance with id $instanceId is ${status}"
     exit 0
   else
-    sleep 10
-    echo "Instance with id $instanceId is ${status}"
-    waitForInstanceStatus $instanceId
+    exit 1
   fi
 }
 
@@ -88,9 +91,29 @@ aws ec2 run-instances \
   --key-name $AWS_KEY_PAIR_NAME \
   --subnet-id $AWS_SUBNET_ID | tee $OUTPUT
 
+instancesIds=$(/opt/providers/aws/parse-created-instance-result-and-get-instance-id $OUTPUT)
 
-instancesIds=$(./parse-created-instance-result-and-get-instance-id $OUTPUT)
+COUNTER=0
+CALLS=0
+for instanceId in $instancesIds
+do
+  echo "Checking if the instance $instanceId is ready"
+  imageIsReady=$(waitForInstanceStatus ${instanceId})
 
-for instanceId in $instancesIds do
-  waitForInstanceStatus $instanceId
+  if [ "${COUNTER}" -ge "${HOW_MANY_IMAGES}" ]; then
+    let COUNTER=COUNTER+1
+    if [ "$imageIsReady" ]; then
+      echo "Image $instanceId is ready"
+    else
+      sleep 10
+      imageIsReady=$(waitForInstanceStatus ${instanceId})
+      let CALLS=$CALLS+1
+
+      if [ "${CALLS}" -ge 100 ]; then
+        echo "Too many calls"
+        exit 1
+      fi
+    fi
+    exit 0
+  fi
 done

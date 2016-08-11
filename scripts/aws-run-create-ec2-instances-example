@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export HOW_MANY_IMAGES=1
+export INSTANCE_TYPE=t2.micro
+
+/opt/providers/aws/create-ec2-instance
