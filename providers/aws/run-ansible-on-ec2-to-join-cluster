@@ -14,10 +14,11 @@ function errorTrap {
 
 function createLocalFactsFileToDefineClusterName() {
   cluster_name=$1
-  cat <<EOF > /etc/ansible/facts.d/preferences.fact
+  touch /etc/ansible/facts.d/preferences.fact
+  cat >/etc/ansible/facts.d/preferences.fact <<EOL
 [cluster]
 cluster_name=${cluster_name}
-EOF
+EOL
 }
 
 function rewriteAnsibleConfigurationFile() {
