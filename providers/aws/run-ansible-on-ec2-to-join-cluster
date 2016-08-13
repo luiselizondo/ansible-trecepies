@@ -1,0 +1,53 @@
+#!/bin/bash
+
+set -x
+set -u
+set -e
+
+CLUSTER_NAME=$1
+HOSTS_TO_CONFIGURE=$2
+
+function errorTrap {
+  status=$?
+  echo "ERROR: Command exited with status $status."
+}
+
+if [ -z "${HOSTS_LABELS_SERVER_URL}" ]; then
+  trap errorTrap EXIT
+fi
+
+function createLocalFactsFileToDefineClusterName() {
+  cluster_name=$1
+  cat <<EOF > /etc/ansible/facts.d/preferences.fact
+[cluster]
+cluster_name=${cluster_name}
+EOF
+}
+
+function rewriteAnsibleConfigurationFile() {
+
+
+  [defaults]
+  host_key_checking = False
+  private_key_file = /root/.ssh/automation-key
+  remote_user = root
+
+}
+
+HOSTS_FILE=`mktemp`
+function runAnsibleOnHosts() {
+  hosts=$1
+
+  echo "[aws_ecs_cluster]" > $HOSTS_FILE
+  for HOST in $hosts
+  do
+    echo $HOST >> $HOSTS_FILE
+  done
+}
+
+createLocalFactsFileToDefineClusterName $CLUSTER_NAME
+
+runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
+
+echo "Installing to: $(cat $HOSTS_FILE)"
+ansible-playbook -i $HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml "$@"

@@ -1,0 +1,8 @@
+
+- name: Add instance to cluster
+  lineinfile:
+    dest: /etc/ecs/ecs.config
+    line: ECS_CLUSTER={{ ansible_local.preferences.cluster.cluster_name }}
+    insertafter: 'EOF'
+    state: present
+    create: no

@@ -1,0 +1,7 @@
+- name: configure ec2 instance to join a ECS cluster
+  hosts: ecs_cluster
+  become: true
+  become_user: root
+  gather_facts: no
+  roles:
+    - aws_ecs_cluster
