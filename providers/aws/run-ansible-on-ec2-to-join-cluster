@@ -23,13 +23,10 @@ EOL
 }
 
 function rewriteAnsibleConfigurationFile() {
-
-
   [defaults]
   host_key_checking = False
   private_key_file = /root/.ssh/automation-key
   remote_user = root
-
 }
 
 HOSTS_FILE=`mktemp`
@@ -48,4 +45,4 @@ createLocalFactsFileToDefineClusterName $CLUSTER_NAME
 runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
 echo "Installing to: $(cat $HOSTS_FILE)"
-ansible-playbook -i $HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml "$@"
+ansible-playbook -i $HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml --extra-vars "cluster_name=${CLUSTER_NAME}"
