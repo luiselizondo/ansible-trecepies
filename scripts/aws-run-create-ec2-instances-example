@@ -2,5 +2,6 @@
 
 export HOW_MANY_IMAGES=1
 export INSTANCE_TYPE=t2.micro
+export CLUSTER_NAME=pl-dev
 
 /opt/providers/aws/create-ec2-instance

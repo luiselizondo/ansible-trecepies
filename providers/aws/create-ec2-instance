@@ -19,6 +19,7 @@ AWS_INSTANCE_TYPE=${INSTANCE_TYPE}
 AWS_KEY_PAIR_NAME=${KEY_PAIR_NAME}
 AWS_SECURITY_GROUP_ID=${SECURITY_GROUP_ID}
 AWS_SUBNET_ID=${SUBNET_ID}
+AWS_CLUSTER_NAME=${CLUSTER_NAME}
 
 IMAGE_ID_OF_US_EAST_1=ami-c17ce0d6
 IMAGE_ID_OF_US_WEST_1=ami-b74b08d7
@@ -73,7 +74,9 @@ aws ec2 run-instances \
   --instance-type $AWS_INSTANCE_TYPE \
   --key-name $AWS_KEY_PAIR_NAME \
   --subnet-id $AWS_SUBNET_ID \
-  --security-group-ids $AWS_SECURITY_GROUP_ID | tee $OUTPUT
+  --security-group-ids $AWS_SECURITY_GROUP_ID \
+  --user-data "#!/bin/bash\n
+echo ECS_CLUSTER=${AWS_CLUSTER_NAME} >> /etc/ecs/ecs.config" | tee $OUTPUT
 
 instancesIds=$(/opt/providers/aws/parse-created-instance-result-and-get-instance-id $OUTPUT)
 
