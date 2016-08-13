@@ -17,7 +17,7 @@ set -u
 COUNT=${HOW_MANY_IMAGES}
 AWS_INSTANCE_TYPE=${INSTANCE_TYPE}
 AWS_KEY_PAIR_NAME=${KEY_PAIR_NAME}
-AWS_SECURITY_GROUP_NAME=${SECURITY_GROUP_NAME}
+AWS_SECURITY_GROUP_ID=${SECURITY_GROUP_ID}
 AWS_SUBNET_ID=${SUBNET_ID}
 
 IMAGE_ID_OF_US_EAST_1=ami-c17ce0d6
@@ -73,7 +73,7 @@ aws ec2 run-instances \
   --instance-type $AWS_INSTANCE_TYPE \
   --key-name $AWS_KEY_PAIR_NAME \
   --subnet-id $AWS_SUBNET_ID \
-  --security-group-ids $AWS_SECURITY_GROUP_NAME | tee $OUTPUT
+  --security-group-ids $AWS_SECURITY_GROUP_ID | tee $OUTPUT
 
 instancesIds=$(/opt/providers/aws/parse-created-instance-result-and-get-instance-id $OUTPUT)
 
@@ -94,7 +94,7 @@ do
   echo "Checking if the instance $instanceId is ready"
   imageIsReady=$(waitForInstanceStatus ${instanceId})
 
-  until [ "$[imageisReady]" = "ready" ]; do
+  until [ "${imageisReady}" = "ready" ]; do
     sleep 30
     imageIsReady=$(waitForInstanceStatus ${instanceId})
   done
