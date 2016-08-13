@@ -94,7 +94,7 @@ do
   echo "Checking if the instance $instanceId is ready"
   imageIsReady=$(waitForInstanceStatus ${instanceId})
 
-  until [ "${imageisReady}" = "ready" ]; do
+  until [ "${imageIsReady}" = "ready" ]; do
     sleep 30
     imageIsReady=$(waitForInstanceStatus ${instanceId})
   done
