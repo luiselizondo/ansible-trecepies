@@ -11,9 +11,9 @@ def main():
 
     instances = data["InstanceStatuses"]
 
-    if 0 in instances:
+    try:
       print(instances[0]["InstanceState"]["Name"])
-    else:
+    except IndexError:
       print("pending")
 
 if __name__ == "__main__":

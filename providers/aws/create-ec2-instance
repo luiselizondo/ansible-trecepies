@@ -91,11 +91,12 @@ function waitForInstanceStatus() {
 
 for instanceId in $instancesIds
 do
-  echo "Checking if the instance $instanceId is ready"
-  imageIsReady=$(waitForInstanceStatus ${instanceId})
+  echo "Checking if the instance $instanceId is running"
+  imageIsReady="pending"
 
-  until [ "${imageIsReady}" = "ready" ]; do
-    sleep 30
+  until [[ "${imageIsReady}" = "running" ]]; do
+    sleep 10
+    echo "Trying again in 10 seconds since the instance is ${imageIsReady}"
     imageIsReady=$(waitForInstanceStatus ${instanceId})
   done
 done
@@ -103,17 +104,20 @@ done
 echo "All images are ready"
 
 function getPublicIPOfInstance() {
-  instanceId=$(removeSpacesFromString $1)
-  publicIP=$(/opt/providers/aws/get-public-ip-of-instance ${instanceId})
+  id=$(removeSpacesFromString $1)
+  publicIP=$(/opt/providers/aws/get-public-ip-of-instance ${id})
   echo $publicIP
 }
+
+echo "Getting the IPs of the instances"
 
 publicIPs=""
 for instanceId in $instancesIds
 do
-  publicIPs="${publicIPs}$(getPublicIPOfInstance ${instanceId})"
+  ip=$(getPublicIPOfInstance ${instanceId})
+  publicIPs="${publicIPs}${ip}"
 done
 
 echo "Public IPs are: ${publicIPs}"
 
-echo "Not cmopleted, we need to trigger ansible and configure the server so it works with ECS"
+echo "Not completed, we need to trigger ansible and configure the server so it works with ECS"

@@ -1,12 +1,12 @@
 {
     "InstanceStatuses": [
         {
-            "InstanceId": "i-d5aa362d",
+            "InstanceId": "i-8564bf1c",
             "InstanceState": {
                 "Code": 16,
                 "Name": "running"
             },
-            "AvailabilityZone": "us-east-1e",
+            "AvailabilityZone": "us-east-1a",
             "SystemStatus": {
                 "Status": "ok",
                 "Details": [
