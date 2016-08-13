@@ -60,6 +60,23 @@ case $AWS_DEFAULT_REGION in
   ;;
 esac
 
+# TODO: Filter out invalid types of machines or create a list of valid machines
+# TODO: Create subnet if neccesary
+
+OUTPUT=`mktemp`
+export AWS_DEFAULT_OUTPUT="json"
+
+# Executes main command
+aws ec2 run-instances \
+  --image-id $IMAGE_ID \
+  --count $COUNT \
+  --instance-type $AWS_INSTANCE_TYPE \
+  --key-name $AWS_KEY_PAIR_NAME \
+  --subnet-id $AWS_SUBNET_ID \
+  --security-group-ids $AWS_SECURITY_GROUP_NAME | tee $OUTPUT
+
+instancesIds=$(/opt/providers/aws/parse-created-instance-result-and-get-instance-id $OUTPUT)
+
 function removeSpacesFromString() {
   STRING=$1
   STRING_WITH_NO_SPACE="$(echo -e "${STRING}" | xargs)"
@@ -68,52 +85,35 @@ function removeSpacesFromString() {
 
 function waitForInstanceStatus() {
   instanceId=$(removeSpacesFromString $1)
-
   status=$(/opt/providers/aws/get-instance-status ${instanceId})
-  if [ "${status}" = "running" ]; then
-    exit 0
-  else
-    exit 1
-  fi
+  echo $status
 }
 
-# Filter out invalid types of machines or create a list of valid machines
-# Create subnet if neccesary
-
-OUTPUT=`mktemp`
-
-export AWS_DEFAULT_OUTPUT="json"
-
-aws ec2 run-instances \
-  --image-id $IMAGE_ID \
-  --count $COUNT \
-  --instance-type $AWS_INSTANCE_TYPE \
-  --key-name $AWS_KEY_PAIR_NAME \
-  --subnet-id $AWS_SUBNET_ID | tee $OUTPUT
-
-instancesIds=$(/opt/providers/aws/parse-created-instance-result-and-get-instance-id $OUTPUT)
-
-COUNTER=0
-CALLS=0
 for instanceId in $instancesIds
 do
   echo "Checking if the instance $instanceId is ready"
   imageIsReady=$(waitForInstanceStatus ${instanceId})
 
-  if [ "${COUNTER}" -ge "${HOW_MANY_IMAGES}" ]; then
-    let COUNTER=COUNTER+1
-    if [ "$imageIsReady" ]; then
-      echo "Image $instanceId is ready"
-    else
-      sleep 10
-      imageIsReady=$(waitForInstanceStatus ${instanceId})
-      let CALLS=$CALLS+1
-
-      if [ "${CALLS}" -ge 100 ]; then
-        echo "Too many calls"
-        exit 1
-      fi
-    fi
-    exit 0
-  fi
+  until [ "$[imageisReady]" = "ready" ]; do
+    sleep 30
+    imageIsReady=$(waitForInstanceStatus ${instanceId})
+  done
 done
+
+echo "All images are ready"
+
+function getPublicIPOfInstance() {
+  instanceId=$(removeSpacesFromString $1)
+  publicIP=$(/opt/providers/aws/get-public-ip-of-instance ${instanceId})
+  echo $publicIP
+}
+
+publicIPs=""
+for instanceId in $instancesIds
+do
+  publicIPs="${publicIPs}$(getPublicIPOfInstance ${instanceId})"
+done
+
+echo "Public IPs are: ${publicIPs}"
+
+echo "Not cmopleted, we need to trigger ansible and configure the server so it works with ECS"

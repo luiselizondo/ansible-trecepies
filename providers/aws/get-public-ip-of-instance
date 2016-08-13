@@ -1,0 +1,12 @@
+#!/bin/bash
+
+INSTANCE_ID=$1
+
+
+OUTPUT=`mktemp`
+aws ec2 describe-instances \
+  --instance-ids $INSTANCE_ID | tee $OUTPUT
+
+publicIP=$(/opt/providers/aws/get-public-ip-of-instance ${instanceId})
+
+echo $publicIP

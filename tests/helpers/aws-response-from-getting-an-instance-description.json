@@ -1,0 +1,116 @@
+{
+    "Reservations": [
+        {
+            "OwnerId": "880416032174",
+            "ReservationId": "r-9dd7ee64",
+            "Groups": [],
+            "Instances": [
+                {
+                    "Monitoring": {
+                        "State": "disabled"
+                    },
+                    "PublicDnsName": "",
+                    "State": {
+                        "Code": 16,
+                        "Name": "running"
+                    },
+                    "EbsOptimized": false,
+                    "LaunchTime": "2016-08-12T00:08:03.000Z",
+                    "PublicIpAddress": "52.91.120.86",
+                    "PrivateIpAddress": "172.30.3.216",
+                    "ProductCodes": [],
+                    "VpcId": "vpc-380e655f",
+                    "StateTransitionReason": "",
+                    "InstanceId": "i-d3d54b2b",
+                    "EnaSupport": true,
+                    "ImageId": "ami-c17ce0d6",
+                    "PrivateDnsName": "ip-172-30-3-216.ec2.internal",
+                    "KeyName": "Jenkins",
+                    "SecurityGroups": [
+                        {
+                            "GroupName": "default",
+                            "GroupId": "sg-d2e11aa8"
+                        }
+                    ],
+                    "ClientToken": "",
+                    "SubnetId": "subnet-5f475162",
+                    "InstanceType": "t2.micro",
+                    "NetworkInterfaces": [
+                        {
+                            "Status": "in-use",
+                            "MacAddress": "06:c2:50:e3:24:5d",
+                            "SourceDestCheck": true,
+                            "VpcId": "vpc-380e655f",
+                            "Description": "",
+                            "Association": {
+                                "PublicIp": "52.91.120.86",
+                                "PublicDnsName": "",
+                                "IpOwnerId": "amazon"
+                            },
+                            "NetworkInterfaceId": "eni-accddba0",
+                            "PrivateIpAddresses": [
+                                {
+                                    "Association": {
+                                        "PublicIp": "52.91.120.86",
+                                        "PublicDnsName": "",
+                                        "IpOwnerId": "amazon"
+                                    },
+                                    "Primary": true,
+                                    "PrivateIpAddress": "172.30.3.216"
+                                }
+                            ],
+                            "Attachment": {
+                                "Status": "attached",
+                                "DeviceIndex": 0,
+                                "DeleteOnTermination": true,
+                                "AttachmentId": "eni-attach-f14d7608",
+                                "AttachTime": "2016-08-12T00:08:03.000Z"
+                            },
+                            "Groups": [
+                                {
+                                    "GroupName": "default",
+                                    "GroupId": "sg-d2e11aa8"
+                                }
+                            ],
+                            "SubnetId": "subnet-5f475162",
+                            "OwnerId": "880416032174",
+                            "PrivateIpAddress": "172.30.3.216"
+                        }
+                    ],
+                    "SourceDestCheck": true,
+                    "Placement": {
+                        "Tenancy": "default",
+                        "GroupName": "",
+                        "AvailabilityZone": "us-east-1e"
+                    },
+                    "Hypervisor": "xen",
+                    "BlockDeviceMappings": [
+                        {
+                            "DeviceName": "/dev/xvda",
+                            "Ebs": {
+                                "Status": "attached",
+                                "DeleteOnTermination": true,
+                                "VolumeId": "vol-13d57392",
+                                "AttachTime": "2016-08-12T00:08:04.000Z"
+                            }
+                        },
+                        {
+                            "DeviceName": "/dev/xvdcz",
+                            "Ebs": {
+                                "Status": "attached",
+                                "DeleteOnTermination": true,
+                                "VolumeId": "vol-46d573c7",
+                                "AttachTime": "2016-08-12T00:08:04.000Z"
+                            }
+                        }
+                    ],
+                    "Architecture": "x86_64",
+                    "RootDeviceType": "ebs",
+                    "RootDeviceName": "/dev/xvda",
+                    "VirtualizationType": "hvm",
+                    "AmiLaunchIndex": 0
+                }
+            ]
+        }
+    ]
+}
