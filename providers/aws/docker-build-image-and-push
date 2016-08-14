@@ -8,7 +8,6 @@ set -u
 
 IMAGE_NAME=$1
 AMAZON_REGISTRY_URL=$2
-IMAGE_NAME=$3
 
 function getDockerLoginCommand() {
   DOCKER_LOGIN_COMMAND=$(aws ecr get-login)
