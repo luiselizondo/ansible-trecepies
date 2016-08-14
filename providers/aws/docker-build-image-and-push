@@ -16,7 +16,7 @@ function getDockerLoginCommand() {
 
 docker build --tag=${IMAGE_NAME}:${BUILD_NUMBER} .
 
-docker tag ${IMAGE_NAME} ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}
+docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}
 
 exec getDockerLoginCommand
 
