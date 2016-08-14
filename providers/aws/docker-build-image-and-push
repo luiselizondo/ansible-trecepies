@@ -6,7 +6,7 @@
 set -e
 set -u
 
-IMAGE_ID=$1
+IMAGE_NAME=$1
 AMAZON_REGISTRY_URL=$2
 IMAGE_NAME=$3
 
@@ -15,7 +15,9 @@ function getDockerLoginCommand() {
   echo $DOCKER_LOGIN_COMMAND
 }
 
-docker tag ${IMAGE_ID} ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}
+docker build --tag=${IMAGE_NAME}:${BUILD_NAME} .
+
+docker tag ${IMAGE_NAME} ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}
 
 exec getDockerLoginCommand
 
