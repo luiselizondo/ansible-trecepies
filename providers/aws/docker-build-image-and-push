@@ -3,7 +3,25 @@
 # TODO: Know if the repository is already created and decide
 #       There's no sense in having the user create the repository first
 
-/usr/local/bin/docker-wrapper
+dockerd &
+
+counter=0
+# Wait a minute for docker to start
+while [ $counter -lt 60 ]; do
+  if [ -e /var/run/docker.sock ]; then
+  	echo "Docker is running"
+  	break
+  else
+	  echo "Testing if docker is running"
+	  counter=$(($counter+1))
+	  sleep 1
+  fi
+done
+
+if [ $counter -eq 60 ] ; then
+    echo "Docker is not running after one minute, exiting"
+    exit 1
+fi
 
 set -e
 set -u
