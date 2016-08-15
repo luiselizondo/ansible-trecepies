@@ -3,7 +3,10 @@
 # Start docker in daemon mode
 echo "Starting docker"
 set -x
-dockerd &
+
+which dockerd
+
+dockerd
 
 counter=0
 # Wait a minute for docker to start
