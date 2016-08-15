@@ -1,7 +1,7 @@
 - name: Add instance to cluster
   lineinfile:
     dest: /etc/ecs/ecs.config
-    line: ECS_CLUSTER={{ cluster_name }}
+    line: ECS_CLUSTER=pl-dev
     insertafter: 'EOF'
     state: present
     create: no
