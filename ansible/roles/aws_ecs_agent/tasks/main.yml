@@ -1,0 +1,13 @@
+
+- name: Install ECS Agent
+  yum:
+    name: ecs-init
+    state: present
+
+- name: Install curl
+  yum:
+    name: curl
+    state: present
+
+- name: Verify that the agent is running
+  shell: curl http://localhost:51678/v1/metadata

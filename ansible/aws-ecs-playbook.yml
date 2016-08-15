@@ -4,4 +4,5 @@
   become_user: root
   gather_facts: no
   roles:
-    - aws_ecs_cluster
+    - docker_yum
+    - aws_ecs_agent
