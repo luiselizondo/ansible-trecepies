@@ -3,6 +3,8 @@
 # TODO: Know if the repository is already created and decide
 #       There's no sense in having the user create the repository first
 
+set -x
+
 docker daemon &
 
 echo "Sleeping for 15 seconds"
@@ -28,7 +30,6 @@ fi
 
 set -e
 set -u
-set -x
 
 IMAGE_NAME=$1
 AMAZON_REGISTRY_URL=$2
