@@ -13,7 +13,6 @@ counter=0
 while [ $counter -lt 60 ]; do
   if [ -e /var/run/docker.sock ]; then
   	echo "Docker is running"
-    cat /var/run/docker.sock
   	break
   else
 	  echo "Testing if docker is running"
