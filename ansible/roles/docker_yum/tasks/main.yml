@@ -1,3 +1,5 @@
-- name: Install Debian Docker
-  shell: curl -sSL https://get.docker.io/ | sudo sh
+- name: Install Docker
+  yum:
+    name: docker
+    state: present
   sudo: yes
