@@ -3,7 +3,7 @@
 # TODO: Know if the repository is already created and decide
 #       There's no sense in having the user create the repository first
 
-. /usr/local/bin/docker-wrapper
+/usr/local/bin/docker-wrapper
 
 set -e
 set -u
