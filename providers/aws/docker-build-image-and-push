@@ -3,7 +3,7 @@
 # TODO: Know if the repository is already created and decide
 #       There's no sense in having the user create the repository first
 
-dockerd &
+docker daemon &
 
 counter=0
 # Wait a minute for docker to start
