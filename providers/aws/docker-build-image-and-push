@@ -8,7 +8,7 @@ set -x
 docker daemon &
 
 echo "Sleeping for 15 seconds"
-sleep 15
+sleep 30
 
 counter=0
 # Wait a minute for docker to start
@@ -30,6 +30,9 @@ fi
 
 set -e
 set -u
+
+docker ps
+docker images
 
 IMAGE_NAME=$1
 AMAZON_REGISTRY_URL=$2
