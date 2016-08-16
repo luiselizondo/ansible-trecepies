@@ -38,6 +38,7 @@ docker images
 
 IMAGE_NAME=$1
 AMAZON_REGISTRY_URL=$2
+ENVIRONMENT=$3
 
 function getDockerLoginCommand() {
   DOCKER_LOGIN_COMMAND=$(aws ecr get-login)
@@ -47,8 +48,10 @@ function getDockerLoginCommand() {
 docker build --tag=${IMAGE_NAME}:${BUILD_NUMBER} .
 
 docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}
+docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${ENVIRONMENT}
 
 dockerLoginCommand=$(getDockerLoginCommand)
 eval $dockerLoginCommand
 
-docker push ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}
+docker push ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${BUILD_NUMBER}
+docker push ${AMAZON_REGISTRY_URL}/${IMAGE_NAME}:${ENVIRONMENT}
