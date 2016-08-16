@@ -35,7 +35,8 @@ RUN ( echo ubuntu ; echo ubuntu ) | passwd root \
 # not very useful until it can run sudo commands
 # RUN ( echo ubuntu ; echo ubuntu ) | passwd jenkins
 
-RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
+RUN curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest \
+    && chmod +x /usr/local/bin/ecs-cli
 
 RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config \
     && sed -i 's/#PasswordAuthentication .*/PasswordAuthentication yes/g' /etc/ssh/sshd_config \
