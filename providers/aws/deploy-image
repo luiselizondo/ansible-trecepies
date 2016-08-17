@@ -39,9 +39,20 @@ function getLatestTaskDefinitionRevision() {
 SERVICE_NAME="ecscompose-service-${PROJECT_NAME}"
 TASK_DEFINITION_NAME="ecscompose-simple-node-app:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
 
-serviceExists=$(AWS_DEFAULT_OUTPUT=text aws ecs list-services | awk '{print $2}' | sed 's|.*/||' | grep '^${SERVICE_NAME}$')
+function determineIfServiceExists() {
+  service_name=$1
+  serviceFoundInResponse=$(AWS_DEFAULT_OUTPUT=text aws ecs list-services | awk '{print $2}' | sed 's|.*/||' | grep '^${service_name}$')
 
-if [ "${serviceExists}" ]; then
+  if [[ -n "${serviceFoundInResponse}" ]]; then
+    echo true
+  else
+    echo false
+  fi
+}
+
+serviceExists=$(determineIfServiceExists ${SERVICE_NAME})
+
+if [[ "${serviceExists}" = true ]]; then
     aws ecs update-service --service "${SERVICE_NAME}" --task-definition "${TASK_DEFINITION_NAME}"
 else
     aws ecs create-service --service-name "${SERVICE_NAME}" --cluster "${ENVIRONMENT}" --task-definition "$TASK_DEFINITION_NAME" --load-balancers "loadBalancerName=${LOAD_BALANCER_NAME},containerName=${CONTAINER_NAME},containerPort=${CONTAINER_PORT}" --desired-count ${HOW_MANY_INSTANCES} --deployment-configuration "maximumPercent=200,minimumHealthyPercent=50" --role ${AWS_ROLE}
