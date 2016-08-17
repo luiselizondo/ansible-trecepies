@@ -31,6 +31,14 @@ sed 's/@@IMAGE_TAG@@/${IMAGE_TAG}/g' ${ORIGINAL_FILE} > ${NEW_FILE}
 
 ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} --verbose create | tee $TASK_DEFINITION_RESPONSE_FILE
 
+cat $TASK_DEFINITION_RESPONSE_FILE
+
+echo "Last line is:"
+
+tail -n1 $TASK_DEFINITION_RESPONSE_FILE
+
+echo "End last line"
+
 SERVICE_NAME="ecscompose-service-${PROJECT_NAME}"
 TASK_DEFINITION_NAME=$(/opt/providers/aws/parse-response-when-creating-a-task-definition $TASK_DEFINITION_RESPONSE_FILE)
 
