@@ -5,4 +5,4 @@ set -u
 
 INPUT_FILE=$1
 
-cat $INPUT_FILE | grep TaskDefinition=ecscompose | sed 's/^.*TaskDefinition=ecscompose/TaskDefinition=ecscompose/g' | sed 's/TaskDefinition=//g'
+cat $INPUT_FILE | grep TaskDefinition=\"ecscompose | sed 's/^.*TaskDefinition="ecscompose/TaskDefinition="ecscompose/g' | sed 's/TaskDefinition=//g' | sed 's/"//g'

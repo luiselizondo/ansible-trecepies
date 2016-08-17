@@ -1,9 +1,10 @@
-DEBU[0000] using config file: /Users/luis/.ecs/config
-DEBU[0000] no config files found, initializing empty ini
-DEBU[0000] Parsing the compose yaml...
-DEBU[0000] Opening compose files: ecs-compose.yml
-DEBU[0000] Transforming yaml to task definition...
-DEBU[0000] Finding task definition in cache or creating if needed  TaskDefinition={
+time="2016-08-17T06:30:33Z" level=debug msg="using config file: /root/.ecs/config"
+time="2016-08-17T06:30:33Z" level=debug msg="no config files found, initializing empty ini"
+time="2016-08-17T06:30:33Z" level=debug msg="Parsing the compose yaml..."
+time="2016-08-17T06:30:33Z" level=debug msg="Opening compose files: /tmp/ecs-compose.yml-processed"
+time="2016-08-17T06:30:33Z" level=debug msg="[0/0] [web]: Adding "
+time="2016-08-17T06:30:33Z" level=debug msg="Transforming yaml to task definition..."
+time="2016-08-17T06:30:33Z" level=debug msg="Finding task definition in cache or creating if needed" TaskDefinition={
   ContainerDefinitions: [{
       Command: [],
       Cpu: 1,
@@ -22,7 +23,7 @@ DEBU[0000] Finding task definition in cache or creating if needed  TaskDefinitio
           Value: "80"
         }],
       ExtraHosts: [],
-      Image: "880416032174.dkr.ecr.us-east-1.amazonaws.com/nodejs-simple-application:27",
+      Image: "880416032174.dkr.ecr.us-east-1.amazonaws.com/nodejs-simple-application:28",
       Links: [],
       Memory: 125,
       MountPoints: [],
@@ -37,43 +38,7 @@ DEBU[0000] Finding task definition in cache or creating if needed  TaskDefinitio
       Ulimits: [],
       VolumesFrom: []
     }],
-  Family: "ecscompose-simple-node-app-default",
+  Family: "ecscompose-simple-node-app",
   Volumes: []
 }
-DEBU[0000] [0/1] [web]: Adding
-DEBU[0000] cache hit                                     taskDef={
-  ContainerDefinitions: [{
-      Cpu: 1,
-      DockerLabels: {
-
-      },
-      Environment: [{
-          Name: "PORT",
-          Value: "80"
-        },{
-          Name: "NODE_ENV",
-          Value: "development"
-        }],
-      Essential: true,
-      Image: "880416032174.dkr.ecr.us-east-1.amazonaws.com/nodejs-simple-application:27",
-      Memory: 125,
-      Name: "web",
-      PortMappings: [{
-          ContainerPort: 80,
-          HostPort: 80,
-          Protocol: "tcp"
-        }]
-    }],
-  Family: "ecscompose-simple-node-app-default",
-  RequiresAttributes: [{
-      Name: "com.amazonaws.ecs.capability.docker-remote-api.1.17"
-    },{
-      Name: "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-    },{
-      Name: "com.amazonaws.ecs.capability.ecr-auth"
-    }],
-  Revision: 3,
-  Status: "ACTIVE",
-  TaskDefinitionArn: "arn:aws:ecs:us-east-1:880416032174:task-definition/ecscompose-simple-node-app-default:3"
-} taskDefHash=1e63d209a755cc98764478ba3848f28d
-INFO[0000] Using ECS task definition                     TaskDefinition=ecscompose-simple-node-app-default:3
+time="2016-08-17T06:30:34Z" level=info msg="Using ECS task definition" TaskDefinition="ecscompose-simple-node-app:4"
