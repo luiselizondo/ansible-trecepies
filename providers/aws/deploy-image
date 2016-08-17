@@ -29,7 +29,7 @@ cat ${ORIGINAL_FILE}
 
 sed 's/@@IMAGE_TAG@@/${IMAGE_TAG}/g' ${ORIGINAL_FILE} > ${NEW_FILE}
 
-ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} --verbose create | tee $TASK_DEFINITION_RESPONSE_FILE
+ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} --verbose create > $TASK_DEFINITION_RESPONSE_FILE
 
 cat $TASK_DEFINITION_RESPONSE_FILE
 
