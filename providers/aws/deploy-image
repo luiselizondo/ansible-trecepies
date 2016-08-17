@@ -41,9 +41,10 @@ TASK_DEFINITION_NAME="ecscompose-simple-node-app:$(getLatestTaskDefinitionRevisi
 
 function determineIfServiceExists() {
   service_name=$1
-  serviceFoundInResponse=$(AWS_DEFAULT_OUTPUT=text aws ecs list-services | awk '{print $2}' | sed 's|.*/||' | grep '^${service_name}$')
+	export AWS_DEFAULT_OUTPUT=text
+  serviceFoundInResponse=$(aws ecs list-services | awk '{print $2}' | sed 's|.*/||')
 
-  if [[ -n "${serviceFoundInResponse}" ]]; then
+  if [[ "${serviceFoundInResponse}" = "${service_name}" ]]; then
     echo true
   else
     echo false
