@@ -10,6 +10,7 @@ HOW_MANY_INSTANCES=${HOW_MANY_INSTANCES}
 LOAD_BALANCER_NAME=${LOAD_BALANCER_NAME}
 CONTAINER_NAME=${CONTAINER_NAME}
 CONTAINER_PORT=${CONTAINER_PORT}
+IMAGE_TAG=${IMAGE_TAG}
 
 # This is temporary
 serviceExists="true"
@@ -19,7 +20,13 @@ ECS_COMPOSE_FILENAME=ecs-compose.yml
 
 echo "Creating a task definition"
 TASK_DEFINITION_RESPONSE_FILE=`mktemp`
-ecs-cli compose --file ${ECS_COMPOSE_FILENAME} --project-name ${PROJECT_NAME} --verbose create | tee $TASK_DEFINITION_RESPONSE_FILE
+
+ORIGINAL_FILE=${ECS_COMPOSE_FILENAME}.json
+NEW_FILE=/tmp/${ECS_COMPOSE_FILENAME}-processed.json
+
+cat ${ORIGINAL_FILE} | sed 's/@@IMAGE_TAG@@/${IMAGE_TAG}/g' > ${NEW_FILE}
+
+ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} --verbose create | tee $TASK_DEFINITION_RESPONSE_FILE
 
 SERVICE_NAME="ecscompose-service-${PROJECT_NAME}"
 TASK_DEFINITION_NAME=$(/opt/providers/aws/parse-response-when-creating-a-task-definition $TASK_DEFINITION_RESPONSE_FILE)
