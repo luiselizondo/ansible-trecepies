@@ -1,18 +1,31 @@
 #!/bin/bash
 
-SERVICE_NAME="flask-signup-service"
-IMAGE_VERSION="v_"${BUILD_NUMBER}
-TASK_FAMILY="flask-signup"
+set -x
+set -u
+set -e
 
-# Create a new task definition for this build
-sed -e "s;%BUILD_NUMBER%;${BUILD_NUMBER};g" flask-signup.json > flask-signup-v_${BUILD_NUMBER}.json
-aws ecs register-task-definition --family flask-signup --cli-input-json file://flask-signup-v_${BUILD_NUMBER}.json
+# Environment is used as the cluster name
+ENVIRONMENT=${ENVIRONMENT}
+HOW_MANY_INSTANCES=${HOW_MANY_INSTANCES}
+LOAD_BALANCER_NAME=${LOAD_BALANCER_NAME}
+CONTAINER_NAME=${CONTAINER_NAME}
+CONTAINER_PORT=${CONTAINER_PORT}
 
-# Update the service with the new task definition and desired count
-TASK_REVISION=`aws ecs describe-task-definition --task-definition flask-signup | egrep "revision" | tr "/" " " | awk '{print $2}' | sed 's/"$//'`
-DESIRED_COUNT=`aws ecs describe-services --services ${SERVICE_NAME} | egrep "desiredCount" | tr "/" " " | awk '{print $2}' | sed 's/,$//'`
-if [ ${DESIRED_COUNT} = "0" ]; then
-    DESIRED_COUNT="1"
+# This is temporary
+serviceExists="true"
+
+AWS_ROLE=ecsServiceRole
+ECS_COMPOSE_FILENAME=ecs-compose.yml
+
+echo "Creating a task definition"
+TASK_DEFINITION_RESPONSE_FILE=`mktemp`
+ecs-cli compose --file ${ECS_COMPOSE_FILENAME} --project-name ${PROJECT_NAME} --verbose create | tee $TASK_DEFINITION_RESPONSE_FILE
+
+SERVICE_NAME="ecscompose-service-${PROJECT_NAME}"
+TASK_DEFINITION_NAME=$(/opt/providers/aws/parse-response-when-creating-a-task-definition $TASK_DEFINITION_RESPONSE_FILE)
+
+if [ "${serviceExists}" = "true" ]; then
+    aws ecs update-service --service "${SERVICE_NAME}" --task-definition "${TASK_DEFINITION_NAME}"
+else
+    aws ecs create-service --service-name "${SERVICE_NAME}" --cluster "${ENVIRONMENT}" --task-definition "$TASK_DEFINITION_NAME" --load-balancers "loadBalancerName=${LOAD_BALANCER_NAME},containerName=${CONTAINER_NAME},containerPort=${CONTAINER_PORT}" --desired-count ${HOW_MANY_INSTANCES} --deployment-configuration "maximumPercent=200,minimumHealthyPercent=50" --role ${AWS_ROLE}
 fi
-
-aws ecs update-service --cluster default --service ${SERVICE_NAME} --task-definition ${TASK_FAMILY}:${TASK_REVISION} --desired-count ${DESIRED_COUNT}

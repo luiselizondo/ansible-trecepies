@@ -3,6 +3,8 @@
 set -u
 set -e
 
+echo "THIS SCRIPT IS DEPRECATED"
+
 TASK_NAME=$1
 IMAGE_TAG=$2
 
