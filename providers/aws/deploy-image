@@ -21,8 +21,11 @@ ECS_COMPOSE_FILENAME=ecs-compose.yml
 echo "Creating a task definition"
 TASK_DEFINITION_RESPONSE_FILE=`mktemp`
 
-ORIGINAL_FILE=${ECS_COMPOSE_FILENAME}.json
+ORIGINAL_FILE=${ECS_COMPOSE_FILENAME}
 NEW_FILE=/tmp/${ECS_COMPOSE_FILENAME}-processed.json
+
+echo "Deploying file ${ECS_COMPOSE_FILENAME} with content:"
+cat ${ORIGINAL_FILE}
 
 cat ${ORIGINAL_FILE} | sed 's/@@IMAGE_TAG@@/${IMAGE_TAG}/g' > ${NEW_FILE}
 
