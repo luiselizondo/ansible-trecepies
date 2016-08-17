@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -x
+set -e
+set -u
+
+LOAD_BALANCER_NAME=${LOAD_BALANCER_NAME}
+LOAD_BALANCER_LISTENER_PORT=${LOAD_BALANCER_LISTENER_PORT}
+INSTANCE_PORT=${INSTANCE_PORT}
+
+aws elb create-load-balancer \
+  --load-balancer-name "${LOAD_BALANCER_NAME}" \
+  --listeners Protocol="TCP,LoadBalancerPort=${LOAD_BALANCER_LISTENER_PORT},InstanceProtocol=TCP,InstancePort=${INSTANCE_PORT}" \
+  --subnets ${SUBNET_ID} \
+  --security-groups "${SECURITY_GROUP_ID}"
