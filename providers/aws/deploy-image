@@ -22,7 +22,7 @@ echo "Creating a task definition"
 TASK_DEFINITION_RESPONSE_FILE=/tmp/task-definition-output.txt
 
 ORIGINAL_FILE=${ECS_COMPOSE_FILENAME}
-NEW_FILE=/tmp/${ECS_COMPOSE_FILENAME}-processed
+NEW_FILE=/tmp/ecs-compose-processed.yml
 
 echo "Deploying file ${ECS_COMPOSE_FILENAME} with content:"
 cat ${ORIGINAL_FILE}
@@ -30,14 +30,17 @@ cat ${ORIGINAL_FILE}
 sed 's/@@IMAGE_TAG@@/${IMAGE_TAG}/g' ${ORIGINAL_FILE} > ${NEW_FILE}
 
 touch $TASK_DEFINITION_RESPONSE_FILE
-compose_result=$(ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} create)
+ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} create
 
-echo $compose_result > $TASK_DEFINITION_RESPONSE_FILE
-
-cat $TASK_DEFINITION_RESPONSE_FILE
+# We have to do this because for some reason we can't parse the ecs-cli compose response
+function getLatestTaskDefinitionRevision() {
+  project_name=$1
+  revision=$(aws ecs list-task-definitions | grep ecscompose-${project_name}: | sed 's|^.*/ecscompose-||' | sed 's|.*:||' | sed 's|\"||' | sed 's|,||' | sort -nr | head -n1)
+  echo $revision
+}
 
 SERVICE_NAME="ecscompose-service-${PROJECT_NAME}"
-TASK_DEFINITION_NAME=$(/opt/providers/aws/parse-response-when-creating-a-task-definition $TASK_DEFINITION_RESPONSE_FILE)
+TASK_DEFINITION_NAME="ecscompose-simple-node-app:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
 
 if [ "${serviceExists}" = "true" ]; then
     aws ecs update-service --service "${SERVICE_NAME}" --task-definition "${TASK_DEFINITION_NAME}"
