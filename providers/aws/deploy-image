@@ -19,7 +19,7 @@ AWS_ROLE=ecsServiceRole
 ECS_COMPOSE_FILENAME=ecs-compose.yml
 
 echo "Creating a task definition"
-TASK_DEFINITION_RESPONSE_FILE=`mktemp`
+TASK_DEFINITION_RESPONSE_FILE=/tmp/task-definition-output.txt
 
 ORIGINAL_FILE=${ECS_COMPOSE_FILENAME}
 NEW_FILE=/tmp/${ECS_COMPOSE_FILENAME}-processed
