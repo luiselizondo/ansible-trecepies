@@ -54,7 +54,7 @@ function determineIfServiceExists() {
 serviceExists=$(determineIfServiceExists ${SERVICE_NAME})
 
 if [[ "${serviceExists}" = true ]]; then
-    aws ecs update-service --service "${SERVICE_NAME}" --task-definition "${TASK_DEFINITION_NAME}"
+    aws ecs update-service --service "${SERVICE_NAME}" --task-definition "${TASK_DEFINITION_NAME}" --deployment-configuration "maximumPercent=100,minimumHealthyPercent=50"
 else
-    aws ecs create-service --service-name "${SERVICE_NAME}" --cluster "${ENVIRONMENT}" --task-definition "$TASK_DEFINITION_NAME" --load-balancers "loadBalancerName=${LOAD_BALANCER_NAME},containerName=${CONTAINER_NAME},containerPort=${CONTAINER_PORT}" --desired-count ${HOW_MANY_INSTANCES} --deployment-configuration "maximumPercent=200,minimumHealthyPercent=50" --role ${AWS_ROLE}
+    aws ecs create-service --service-name "${SERVICE_NAME}" --cluster "${ENVIRONMENT}" --task-definition "$TASK_DEFINITION_NAME" --load-balancers "loadBalancerName=${LOAD_BALANCER_NAME},containerName=${CONTAINER_NAME},containerPort=${CONTAINER_PORT}" --desired-count ${HOW_MANY_INSTANCES} --deployment-configuration "maximumPercent=100,minimumHealthyPercent=50" --role ${AWS_ROLE}
 fi
