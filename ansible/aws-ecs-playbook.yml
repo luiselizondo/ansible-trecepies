@@ -4,5 +4,9 @@
   become_user: root
   gather_facts: no
   roles:
+    - common
     - docker
     - aws_ecs_agent
+  pre_tasks:
+    - raw: sudo apt-get update --fix-missing
+    - raw: sudo apt-get -y install python-simplejson python-pip
