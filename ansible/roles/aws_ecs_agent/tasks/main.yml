@@ -3,6 +3,10 @@
     name: curl
     state: present
 
+- name: Install curl
+  pip:
+    name: docker-py
+
 - name: Create the Agent Container
   docker_container:
     state: started
