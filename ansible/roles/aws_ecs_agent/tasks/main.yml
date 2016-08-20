@@ -4,6 +4,11 @@
     state: present
 
 - name: Install curl
+  yum:
+    name: python-pip
+    state: present
+
+- name: Install curl
   pip:
     name: docker-py
 
