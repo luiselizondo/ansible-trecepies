@@ -122,12 +122,12 @@ publicIPs=""
 for instanceId in $instancesIds
 do
   ip=$(getPublicIPOfInstance ${instanceId})
-  publicIPs="${publicIPs}${ip}"
+  publicIPs="${publicIPs} ${ip}"
 done
 
 echo "Public IPs are: ${publicIPs}"
 
-echo "Not completed, we need to trigger ansible and configure the server so it works with ECS"
 
 # How to run ansible or SSH, without having the pem file here
 # so we can execute the Step 10 in http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html
+/opt/providers/aws/create-ec2-instance ${AWS_CLUSTER_NAME} ${publicIPs}
