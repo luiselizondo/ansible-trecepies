@@ -3,12 +3,17 @@
     name: curl
     state: present
 
-- name: Install curl
+- name: Install python
+  yum:
+    name: python
+    state: present
+
+- name: Install python pip
   yum:
     name: python-pip
     state: present
 
-- name: Install curl
+- name: Install docker-py using pip
   pip:
     name: docker-py
 
