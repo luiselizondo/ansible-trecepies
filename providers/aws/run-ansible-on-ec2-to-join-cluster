@@ -28,4 +28,3 @@ runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
 echo "Installing to: $(cat $HOSTS_FILE)"
 ansible-playbook  --private-key /keys/${PRIVATE_KEY_NAME} -i $HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml --extra-vars "cluster_name=${CLUSTER_NAME}"
--
