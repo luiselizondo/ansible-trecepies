@@ -52,6 +52,8 @@ RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config \
     && echo "UserKnownHostsFile=/dev/null" >> /root/.ssh/config \
     && mkdir -p /root/.aws
 
+VOLUME /keys
+
 COPY files/aws-config-file /root/.aws/config
 COPY ansible/ansible.cfg /etc/ansible/ansible.cfg
 COPY ansible /opt/ansible

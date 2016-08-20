@@ -6,6 +6,7 @@ set -e
 
 CLUSTER_NAME=$1
 HOSTS_TO_CONFIGURE=$2
+PRIVATE_KEY_NAME=$3
 
 function errorTrap {
   status=$?
@@ -26,5 +27,5 @@ function runAnsibleOnHosts() {
 runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
 echo "Installing to: $(cat $HOSTS_FILE)"
-ansible-playbook -i $HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml --extra-vars "cluster_name=${CLUSTER_NAME}"
+ansible-playbook  --private-key /keys/${PRIVATE_KEY_NAME} -i $HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml --extra-vars "cluster_name=${CLUSTER_NAME}"
 -
