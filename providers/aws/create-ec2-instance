@@ -62,6 +62,8 @@ case $AWS_DEFAULT_REGION in
   ;;
 esac
 
+UBUNTU_IMAGE_ID=ami-2d39803a
+
 # TODO: Filter out invalid types of machines or create a list of valid machines
 # TODO: Create subnet if neccesary
 
@@ -70,7 +72,7 @@ export AWS_DEFAULT_OUTPUT="json"
 
 # Executes main command
 aws ec2 run-instances \
-  --image-id $IMAGE_ID \
+  --image-id $UBUNTU_IMAGE_ID \
   --count $COUNT \
   --instance-type $AWS_INSTANCE_TYPE \
   --key-name $AWS_KEY_PAIR_NAME \

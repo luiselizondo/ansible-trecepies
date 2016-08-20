@@ -1,15 +1,15 @@
 - name: Install curl
-  yum:
+  apt:
     name: curl
     state: present
 
 - name: Install python
-  yum:
+  apt:
     name: python
     state: present
 
 - name: Install python pip
-  yum:
+  apt:
     name: python-pip
     state: present
 
