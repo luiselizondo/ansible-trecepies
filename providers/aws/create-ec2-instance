@@ -99,7 +99,7 @@ do
   echo "Checking if the instance $instanceId is running"
   imageIsReady="pending"
 
-  until [[ "${imageIsReady}" = "running" ]]; do
+  until [[ "${imageIsReady}" = "passed" ]]; do
     sleep 10
     echo "Trying again in 10 seconds since the instance is ${imageIsReady}"
     imageIsReady=$(waitForInstanceStatus ${instanceId})

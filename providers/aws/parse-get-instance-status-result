@@ -12,7 +12,7 @@ def main():
     instances = data["InstanceStatuses"]
 
     try:
-      print(instances[0]["InstanceState"]["Name"])
+      print(instances[0]["InstanceStatus"]["Details"][0]["Status"])
     except IndexError:
       print("pending")
 
