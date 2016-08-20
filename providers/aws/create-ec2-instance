@@ -130,4 +130,4 @@ echo "Public IPs are: ${publicIPs}"
 
 # How to run ansible or SSH, without having the pem file here
 # so we can execute the Step 10 in http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html
-/opt/providers/aws/create-ec2-instance ${AWS_CLUSTER_NAME} ${publicIPs}
+/opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${publicIPs}
