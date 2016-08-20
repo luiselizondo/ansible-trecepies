@@ -17,6 +17,10 @@
   pip:
     name: docker-py
 
+- name: Install docker-py using pip
+  pip:
+    name: python-docker-py
+
 - name: Create the Agent Container
   docker_container:
     state: started
