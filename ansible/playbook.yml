@@ -9,10 +9,8 @@
   hosts: docker_hosts
   become: true
   become_user: root
-  vars:
-    dist: xenial
   roles:
-    - docker
+    - docker_xenial
 
 - name: install dokku
   hosts: dokku_hosts
@@ -31,11 +29,9 @@
   become: true
   become_user: root
   gather_facts: no
-  vars:
-    dist: xenial
   roles:
     - common
-    - docker
+    - docker_xenial
     - jenkins
   pre_tasks:
     - raw: sudo apt-get update --fix-missing

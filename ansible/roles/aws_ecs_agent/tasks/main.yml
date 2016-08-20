@@ -33,7 +33,7 @@
       ECS_LOGFILE: /log/ecs-agent.log
       ECS_LOGLEVEL: info
       ECS_DATADIR: /data
-      ECS_CLUSTER: devtest
+      ECS_CLUSTER: {{ cluster_name }}
       ECS_ENABLE_TASK_IAM_ROLE: true
     volumes:
       --volume=/var/run/docker.sock:/var/run/docker.sock

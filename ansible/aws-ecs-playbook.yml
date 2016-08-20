@@ -4,10 +4,10 @@
   become_user: root
   gather_facts: no
   vars:
-    dist: trusty
+    cluster_name: '{{ cluster_name }}'
   roles:
     - common
-    - docker
+    - docker_trusty
     - aws_ecs_agent
   pre_tasks:
     - raw: sudo apt-get update --fix-missing
