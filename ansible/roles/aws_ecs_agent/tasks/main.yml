@@ -32,11 +32,11 @@
       ECS_CLUSTER: '{{ cluster_name }}'
       ECS_ENABLE_TASK_IAM_ROLE: true
     volumes:
-      --volume=/var/run/docker.sock:/var/run/docker.sock
-      --volume=/var/log/ecs/:/log
-      --volume=/var/lib/ecs/data:/data
-      --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro
-      --volume=/var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log/ecs/:/log
+      - /var/lib/ecs/data:/data
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro
 
 - name: Verify that the agent is running
   shell: curl http://localhost:51678/v1/metadata
