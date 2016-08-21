@@ -27,4 +27,10 @@ function runAnsibleOnHosts() {
 runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
 echo "Installing to: $(cat $HOSTS_FILE)"
-ansible-playbook --private-key /keys/${PRIVATE_KEY_NAME} -c paramiko -i $HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml --extra-vars "cluster_name=${CLUSTER_NAME}"
+ansible-playbook \
+  --user=ubuntu \
+  --private-key=/keys/${PRIVATE_KEY_NAME} \
+  --extra-vars="cluster_name=${CLUSTER_NAME}" \
+  --verbose \
+  --become \
+  --inventory-file=$HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml
