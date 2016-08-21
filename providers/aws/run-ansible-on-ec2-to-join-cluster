@@ -5,8 +5,9 @@ set -u
 set -e
 
 CLUSTER_NAME=$1
-HOSTS_TO_CONFIGURE=$2
-PRIVATE_KEY_NAME=$3
+PRIVATE_KEY_NAME=$2
+USERNAME=$3
+HOSTS_TO_CONFIGURE=$4
 
 function errorTrap {
   status=$?
@@ -28,7 +29,7 @@ runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
 echo "Installing to: $(cat $HOSTS_FILE)"
 ansible-playbook \
-  --user=ubuntu \
+  --user=${USERNAME} \
   --private-key=/keys/${PRIVATE_KEY_NAME} \
   --extra-vars="cluster_name=${CLUSTER_NAME}" \
   --verbose \

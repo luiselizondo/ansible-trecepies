@@ -63,6 +63,7 @@ case $AWS_DEFAULT_REGION in
 esac
 
 UBUNTU_IMAGE_ID=ami-2d39803a
+USERNAME=ubuntu
 
 # TODO: Filter out invalid types of machines or create a list of valid machines
 # TODO: Create subnet if neccesary
@@ -130,4 +131,4 @@ echo "Public IPs are: ${publicIPs}"
 
 # How to run ansible or SSH, without having the pem file here
 # so we can execute the Step 10 in http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html
-/opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${publicIPs} ${PRIVATE_KEY_NAME}
+/opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${PRIVATE_KEY_NAME} ${USERNAME} "${publicIPs}"
