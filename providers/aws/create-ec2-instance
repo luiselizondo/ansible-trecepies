@@ -128,5 +128,5 @@ done
 
 echo "Public IPs are: ${publicIPs}"
 echo "Waiting 30 seconds to avoid timeouts with Ansible"
-wait 30
+sleep 30
 /opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${PRIVATE_KEY_NAME} ${USERNAME} "${publicIPs}"
