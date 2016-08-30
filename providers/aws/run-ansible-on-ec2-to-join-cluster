@@ -34,4 +34,5 @@ ansible-playbook \
   --extra-vars="cluster_name=${CLUSTER_NAME}" \
   --verbose \
   --become \
+  -c paramiko \
   --inventory-file=$HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml
