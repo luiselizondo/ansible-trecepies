@@ -45,7 +45,7 @@ function determineIfServiceExists() {
 	export AWS_DEFAULT_OUTPUT=text
   serviceFoundInResponse=$(aws ecs list-services --cluster ${ENVIRONMENT} | awk '{print $2}' | sed 's|.*/||')
 
-  if [[ "${serviceFoundInResponse}" = "ecscompose-service-${service_name}" ]]; then
+  if [ "${serviceFoundInResponse}" = "${service_name}" ]; then
     echo true
   else
     echo false
