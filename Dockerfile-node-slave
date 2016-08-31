@@ -1,4 +1,4 @@
-FROM local:runner
+FROM local/runner
 MAINTAINER Luis Elizondo <lelizondo@gmail.com>
 
 RUN apt-get update --fix-missing
