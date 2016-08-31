@@ -3,8 +3,8 @@ MAINTAINER Luis Elizondo <lelizondo@gmail.com>
 
 RUN apt-get update --fix-missing
 RUN apt-get install -y curl \
-    && curl -sL https://deb.nodesource.com/setup | sudo bash - \
-    && apt-get install -y nodejs \
+    && curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash - \
+    && apt-get install -y nodejs build-essential \
     && npm install -g npm@latest \
     && npm install -g mocha node-gyp \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
@@ -14,5 +14,4 @@ RUN apt-get install -y curl \
 
 EXPOSE 80
 EXPOSE 3000
-WORKDIR /var/www
-CMD ["npm", "start"]
+CMD ["/opt/start-sshd"]
