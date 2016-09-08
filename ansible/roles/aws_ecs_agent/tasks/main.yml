@@ -37,6 +37,3 @@
       - /var/lib/ecs/data:/data
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
       - /var/run/docker/execdriver/native:/var/lib/docker/execdriver/native:ro
-
-- name: Verify that the agent is running
-  shell: curl http://localhost:51678/v1/metadata
