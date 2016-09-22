@@ -80,6 +80,7 @@ aws ec2 run-instances \
   --subnet-id $AWS_SUBNET_ID \
   --security-group-ids $AWS_SECURITY_GROUP_ID \
   --iam-instance-profile Name="${AWS_IAM_INSTANCE_PROFILE}" \
+  --no-associate-public-ip-address \
   --user-data "#!/bin/bash\n
 echo ECS_CLUSTER=${AWS_CLUSTER_NAME} >> /etc/ecs/ecs.config" | tee $OUTPUT
 
@@ -111,22 +112,22 @@ done
 
 echo "All images are ready"
 
-function getPublicIPOfInstance() {
+function getPrivateIPOfInstance() {
   id=$(removeSpacesFromString $1)
-  publicIP=$(/opt/providers/aws/get-public-ip-of-instance ${id})
-  echo $publicIP
+  privateIP=$(/opt/providers/aws/get-private-ip-of-instance ${id})
+  echo $privateIP
 }
 
-echo "Getting the IPs of the instances"
+echo "Getting the private IPs of the instances"
 
-publicIPs=""
+privateIPs=""
 for instanceId in $instancesIds
 do
-  ip=$(getPublicIPOfInstance ${instanceId})
-  publicIPs="${publicIPs} ${ip}"
+  ip=$(getPrivateIPOfInstance ${instanceId})
+  privateIPs="${privateIPs} ${ip}"
 done
 
-echo "Public IPs are: ${publicIPs}"
+echo "Private IPs are: ${privateIPs}"
 echo "Waiting 30 seconds to avoid timeouts with Ansible"
 sleep 30
-/opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${PRIVATE_KEY_NAME} ${USERNAME} "${publicIPs}"
+/opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${PRIVATE_KEY_NAME} ${USERNAME} "${privateIPs}"

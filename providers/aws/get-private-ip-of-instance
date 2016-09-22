@@ -1,0 +1,11 @@
+#!/bin/bash
+
+INSTANCE_ID=$1
+
+OUTPUT=`mktemp`
+aws ec2 describe-instances \
+  --instance-ids $INSTANCE_ID > $OUTPUT
+
+privateIP=$(/opt/providers/aws/parse-instance-object-to-get-private-ip ${OUTPUT})
+
+echo $privateIP
