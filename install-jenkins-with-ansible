@@ -25,4 +25,4 @@ runAnsibleOnHosts "${JENKINS_IP}"
 
 export ANSIBLE_HOST_KEY_CHECKING=False
 
-ansible-playbook -i $HOSTS_FILE ${PWD}/ansible/playbook.yml -c paramiko --user=root --private-key=$PATH_TO_PRIVATE_KEY -v
+ansible-playbook -i $HOSTS_FILE ${PWD}/ansible/playbook.yml --user=ubuntu --private-key=$PATH_TO_PRIVATE_KEY -v
