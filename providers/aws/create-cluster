@@ -5,6 +5,8 @@ set -u
 
 CLUSTER_NAME=$1
 
+echo "Creating ECS cluster ${CLUSTER_NAME}"
 aws ecs create-cluster --cluster-name "${CLUSTER_NAME}"
 
+echo "Creating placement group ${CLUSTER_NAME}"
 aws ec2 create-placement-group --group-name "${CLUSTER_NAME}" --strategy cluster
