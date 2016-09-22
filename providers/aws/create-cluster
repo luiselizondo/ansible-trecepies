@@ -7,4 +7,4 @@ CLUSTER_NAME=$1
 
 aws ecs create-cluster --cluster-name "${CLUSTER_NAME}"
 
-aws ec2 create-placement-group --group-name "${CLUSTER_NAME}" --stragegy cluster
+aws ec2 create-placement-group --group-name "${CLUSTER_NAME}" --strategy cluster
