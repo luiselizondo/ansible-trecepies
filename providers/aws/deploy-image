@@ -4,6 +4,8 @@ set -x
 set -u
 set -e
 
+# TODO Need to re-tag the image to reflect the current environment
+
 # Environment is used as the cluster name
 ENVIRONMENT=${ENVIRONMENT}
 HOW_MANY_INSTANCES=${HOW_MANY_INSTANCES}
