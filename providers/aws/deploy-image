@@ -43,7 +43,7 @@ function getLatestTaskDefinitionRevision() {
 }
 
 SERVICE_NAME="ecscompose-service-${PROJECT_NAME}"
-TASK_DEFINITION_NAME="ecscompose-simple-node-app:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
+TASK_DEFINITION_NAME="ecscompose-${CONTAINER_NAME}:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
 
 function determineIfServiceExists() {
   service_name=$1
