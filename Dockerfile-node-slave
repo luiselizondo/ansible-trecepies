@@ -6,9 +6,8 @@ RUN apt-get install -y curl \
     && curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - \
     && apt-get install -y nodejs build-essential \
     && npm install -g npm@latest \
-    && npm install -g mocha node-gyp typings
-RUN cd /tmp \
-    && curl -O https://github.com/Medium/phantomjs/releases/download/v2.1.1/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
+    && npm install -g mocha node-gyp typings \
+     curl -L -o /tmp/phantomjs-2.1.1-linux-x86_64.tar.bz2 https://github.com/Medium/phantomjs/releases/download/v2.1.1/phantomjs-2.1.1-linux-x86_64.tar.bz2 \
     && tar xvfj phantomjs-2.1.1-linux-x86_64.tar.bz2 \
     && mv phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs \
     && rm -Rf phantomjs-* \
