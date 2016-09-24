@@ -82,7 +82,6 @@ aws ec2 run-instances \
   --security-group-ids $AWS_SECURITY_GROUP_ID \
   --iam-instance-profile Name="${AWS_IAM_INSTANCE_PROFILE}" \
   --no-associate-public-ip-address \
-  --placement "AvailabilityZone=${AWS_AVAILABILITY_ZONE},GroupName=${AWS_CLUSTER_NAME},Tenancy=default" \
   --user-data "#!/bin/bash\n
 echo ECS_CLUSTER=${AWS_CLUSTER_NAME} >> /etc/ecs/ecs.config" | tee $OUTPUT
 
