@@ -26,8 +26,10 @@ NEW_FILE=/tmp/ecs-compose-processed.yml
 echo "Deploying file ${ECS_COMPOSE_FILENAME} with content:"
 cat ${ORIGINAL_FILE}
 
-sed -i "s/@@IMAGE_TAG@@/${IMAGE_TAG}/g" ${ORIGINAL_FILE}
-sed -i "s/@@ENVIRONMENT@@/${ENVIRONMENT}/g" ${ORIGINAL_FILE}
+cp ${ORIGINAL_FILE} ${NEW_FILE}
+
+sed -i "s/@@IMAGE_TAG@@/${IMAGE_TAG}/g" ${NEW_FILE}
+sed -i "s/@@ENVIRONMENT@@/${ENVIRONMENT}/g" ${NEW_FILE}
 
 touch $TASK_DEFINITION_RESPONSE_FILE
 ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} create
