@@ -5,6 +5,7 @@ set -u
 set -e
 
 # TODO Need to re-tag the image to reflect the current environment
+# TODO Need to determine how many instances are running and never reduce the number
 
 # Environment is used as the cluster name
 ENVIRONMENT=${ENVIRONMENT}

@@ -16,6 +16,7 @@
 - name: Install docker-py using pip
   pip:
     name: docker-py
+    version: 1.7.0
 
 - name: Create the Agent Container
   docker_container:

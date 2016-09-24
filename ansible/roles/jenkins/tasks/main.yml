@@ -5,6 +5,7 @@
 - name: Install docker-py using pip
   pip:
     name: docker-py
+    version: 1.7.0
 
 - name: Append the user jenkins to the group docker
   user:
