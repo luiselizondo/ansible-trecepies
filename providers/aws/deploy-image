@@ -14,6 +14,7 @@ LOAD_BALANCER_NAME=${LOAD_BALANCER_NAME}
 CONTAINER_NAME=${CONTAINER_NAME}
 CONTAINER_PORT=${CONTAINER_PORT}
 IMAGE_TAG=${IMAGE_TAG}
+IMAGE_NAME=${IMAGE_NAME}
 
 AWS_ROLE=ecsServiceRole
 ECS_COMPOSE_FILENAME=ecs-compose.yml
@@ -47,7 +48,7 @@ function getLatestTaskDefinitionRevision() {
 }
 
 SERVICE_NAME="ecscompose-service-${PROJECT_NAME}"
-TASK_DEFINITION_NAME="ecscompose-${CONTAINER_NAME}:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
+TASK_DEFINITION_NAME="ecscompose-${IMAGE_NAME}:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
 
 function determineIfServiceExists() {
   service_name=$1
