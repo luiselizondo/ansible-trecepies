@@ -3,13 +3,47 @@
 set -u
 set -e
 
-ENVIRONMENT=${ENVIRONMENT}
 LOAD_BALANCER_NAME=${LOAD_BALANCER_NAME}
 LOAD_BALANCER_LISTENER_PORT=${LOAD_BALANCER_LISTENER_PORT}
-INSTANCE_PORT=${INSTANCE_PORT}
+SECURITY_GROUP_ID=${SECURITY_GROUP_ID}
+ENVIRONMENT=${ENVIRONMENT}
+VPC_ID=${VPC_ID}
 
-aws elb create-load-balancer \
-  --load-balancer-name "${ENVIRONMENT}-${LOAD_BALANCER_NAME}" \
-  --listeners Protocol="TCP,LoadBalancerPort=${LOAD_BALANCER_LISTENER_PORT},InstanceProtocol=TCP,InstancePort=${INSTANCE_PORT}" \
-  --subnets ${SUBNET_ID} \
-  --security-groups "${SECURITY_GROUP_ID}"
+TARGET_GROUP_NAME="${LOAD_BALANCER_NAME}-tg"
+LOAD_BALANCER_RESPONSE=`mktemp`
+TARGET_GROUP_RESPONSE=`mktemp`
+
+function createListener() {
+  loadBalancerArn=$1
+  targetGroupArn=$2
+  port=$3
+
+  cmd=$(aws elbv2 create-listener \
+    --load-balancer-arn $loadBalancerArn \
+    --protocol HTTP \
+    --port $port \
+    --default-actions Type=forward,TargetGroupArn=$targetGroupArn)
+  echo $cmd
+}
+
+echo "Creating load balancer with name ${LOAD_BALANCER_NAME}"
+aws elbv2 create-load-balancer \
+  --name "${LOAD_BALANCER_NAME}" \
+  --subnets "${SUBNET_ID_1}" "${SUBNET_ID_2}" \
+  --security-groups "${SECURITY_GROUP_ID}" \
+  --scheme internet-facing | tee $LOAD_BALANCER_RESPONSE
+
+loadBalancerArn=$(/opt/providers/aws/parse-load-balancer-response-and-get-arn $LOAD_BALANCER_RESPONSE)
+
+echo "Created load balancer with arn: ${loadBalancerArn}"
+
+echo "Creating target group with name ${TARGET_GROUP_NAME}"
+aws elbv2 create-target-group \
+  --name ${TARGET_GROUP_NAME} \
+  --protocol HTTP \
+  --port ${LOAD_BALANCER_LISTENER_PORT} \
+  --vpc-id ${VPC_ID} | tee $TARGET_GROUP_RESPONSE
+
+targetGroupArn=$(/opt/providers/aws/parse-target-group-response-and-get-arn $TARGET_GROUP_RESPONSE)
+
+createListener $loadBalancerArn $targetGroupArn $LOAD_BALANCER_LISTENER_PORT
