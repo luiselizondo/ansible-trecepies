@@ -31,15 +31,13 @@ cat ${ORIGINAL_FILE}
 
 cp ${ORIGINAL_FILE} ${NEW_FILE}
 
-sed -i "s/@@IMAGE_TAG@@/${IMAGE_TAG}/g" ${NEW_FILE}
-sed -i "s/@@ENVIRONMENT@@/${ENVIRONMENT}/g" ${NEW_FILE}
+envsubst < ${ORIGINAL_FILE} > ${NEW_FILE}
 
 touch $TASK_DEFINITION_RESPONSE_FILE
 ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} create
 
 echo "Task definitions available:"
 aws ecs list-task-definitions
-
 
 # We have to do this because for some reason we can't parse the ecs-cli compose response
 function getLatestTaskDefinitionRevision() {
