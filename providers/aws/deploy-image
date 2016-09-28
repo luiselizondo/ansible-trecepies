@@ -59,7 +59,7 @@ aws ecs list-services --cluster ${ENVIRONMENT}
 function determineIfServiceExists() {
   service_name=$1
 	export AWS_DEFAULT_OUTPUT=text
-  serviceFoundInResponse=$(aws ecs list-services --cluster ${ENVIRONMENT} | grep ${TASK_DEFINITION_NAME} | awk '{print $2}' | sed 's|.*/||')
+  serviceFoundInResponse=$(aws ecs list-services --cluster ${ENVIRONMENT} | grep ecscompose-service-${IMAGE_NAME} | awk '{print $2}' | sed 's|.*/||')
 
   if [ "${serviceFoundInResponse}" = "${service_name}" ]; then
     echo true
