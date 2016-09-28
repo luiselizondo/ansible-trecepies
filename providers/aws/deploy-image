@@ -55,7 +55,7 @@ TASK_DEFINITION_NAME="ecscompose-${IMAGE_NAME}:$(getLatestTaskDefinitionRevision
 function determineIfServiceExists() {
   service_name=$1
 	export AWS_DEFAULT_OUTPUT=text
-  serviceFoundInResponse=$(aws ecs list-services --cluster ${ENVIRONMENT} | awk '{print $2}' | sed 's|.*/||')
+  serviceFoundInResponse=$(aws ecs list-services --cluster ${ENVIRONMENT} | grep ecscompose-${IMAGE_NAME} | awk '{print $2}' | sed 's|.*/||')
 
   if [ "${serviceFoundInResponse}" = "${service_name}" ]; then
     echo true
