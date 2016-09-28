@@ -7,7 +7,8 @@ ENV DOCKER_BUCKET get.docker.com
 ENV DOCKER_VERSION 1.12.0
 ENV DOCKER_SHA256 3dd07f65ea4a7b4c8829f311ab0213bca9ac551b5b24706f3e79a97e22097f8b
 
-RUN apt-get update --fix-missing
+RUN apt-get update --fix-missing \
+    && apt-get update
 RUN apt-get install -y software-properties-common \
     && apt-add-repository ppa:ansible/ansible \
     && apt-get update \
