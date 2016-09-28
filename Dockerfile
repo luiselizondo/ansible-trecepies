@@ -7,17 +7,15 @@ ENV DOCKER_BUCKET get.docker.com
 ENV DOCKER_VERSION 1.12.0
 ENV DOCKER_SHA256 3dd07f65ea4a7b4c8829f311ab0213bca9ac551b5b24706f3e79a97e22097f8b
 
-RUN apt-get update --fix-missing \
-    && apt-get update
-RUN apt-get dist-upgrade -y \
-    && apt-get install -y software-properties-common \
+RUN apt-get update --fix-missing
+RUN apt-get install -y software-properties-common \
     && apt-add-repository ppa:ansible/ansible \
     && apt-get update \
-    && apt-get -y install ansible openssh-server git curl python python-pip openjdk-7-jdk iptables  ca-certificates lxc \
+    && apt-get -y install ansible gettext-base openssh-server git curl python python-pip openjdk-7-jdk iptables  ca-certificates lxc \
     && curl -L https://github.com/digitalocean/doctl/releases/download/v1.1.0/doctl-1.1.0-linux-amd64.tar.gz | tar xz \
     && mv ./doctl /usr/local/bin \
     && pip install awscli \
-    && apt-get -y install gettext-base \
+    && apt-get dist-upgrade -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && apt-get autoremove -y \
