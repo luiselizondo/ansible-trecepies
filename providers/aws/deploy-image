@@ -33,6 +33,9 @@ cp ${ORIGINAL_FILE} ${NEW_FILE}
 
 envsubst < ${ORIGINAL_FILE} > ${NEW_FILE}
 
+echo "Processed file is"
+cat ${NEW_FILE}
+
 touch $TASK_DEFINITION_RESPONSE_FILE
 ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} create
 
