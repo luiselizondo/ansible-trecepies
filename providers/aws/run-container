@@ -8,7 +8,6 @@ set -e
 # Environment is used as the cluster name
 ENVIRONMENT=${ENVIRONMENT}
 HOW_MANY_INSTANCES=1
-IMAGE_NAME=${IMAGE_NAME}
 CONTAINER_INSTANCE_ID=${CONTAINER_INSTANCE_ID}
 PROJECT_NAME=${PROJECT_NAME}
 
@@ -34,8 +33,8 @@ cat ${NEW_FILE}
 touch $TASK_DEFINITION_RESPONSE_FILE
 ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} create
 
-echo "Task definitions available for ecscompose-${IMAGE_NAME}:"
-aws ecs list-task-definitions | grep ecscompose-${IMAGE_NAME}
+echo "Task definitions available for ecscompose-${PROJECT_NAME}:"
+aws ecs list-task-definitions | grep ecscompose-${PROJECT_NAME}
 
 # We have to do this because for some reason we can't parse the ecs-cli compose response
 function getLatestTaskDefinitionRevision() {
@@ -44,7 +43,7 @@ function getLatestTaskDefinitionRevision() {
   echo $revision
 }
 
-TASK_DEFINITION_NAME="ecscompose-${IMAGE_NAME}:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
+TASK_DEFINITION_NAME="ecscompose-${PROJECT_NAME}:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
 
 # function determineIfServiceExists() {
 #   service_name=$1
