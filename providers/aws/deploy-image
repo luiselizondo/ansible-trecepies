@@ -54,7 +54,7 @@ TASK_DEFINITION_NAME="ecscompose-${IMAGE_NAME}:$(getLatestTaskDefinitionRevision
 
 export AWS_DEFAULT_OUTPUT=text
 echo "Current services"
-aws ecs list-services
+aws ecs list-services --cluster ${ENVIRONMENT}
 
 function determineIfServiceExists() {
   service_name=$1
