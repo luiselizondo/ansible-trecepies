@@ -39,8 +39,8 @@ cat ${NEW_FILE}
 touch $TASK_DEFINITION_RESPONSE_FILE
 ecs-cli compose --file ${NEW_FILE} --project-name ${PROJECT_NAME} create
 
-echo "Task definitions available:"
-aws ecs list-task-definitions
+echo "Task definitions available for ecscompose-${IMAGE_NAME}:"
+aws ecs list-task-definitions | grep ecscompose-${IMAGE_NAME}
 
 # We have to do this because for some reason we can't parse the ecs-cli compose response
 function getLatestTaskDefinitionRevision() {
@@ -55,7 +55,7 @@ TASK_DEFINITION_NAME="ecscompose-${IMAGE_NAME}:$(getLatestTaskDefinitionRevision
 function determineIfServiceExists() {
   service_name=$1
 	export AWS_DEFAULT_OUTPUT=text
-  serviceFoundInResponse=$(aws ecs list-services --cluster ${ENVIRONMENT} | grep ecscompose-${IMAGE_NAME} | awk '{print $2}' | sed 's|.*/||')
+  serviceFoundInResponse=$(aws ecs list-services --cluster ${ENVIRONMENT} | grep ${TASK_DEFINITION_NAME} | awk '{print $2}' | sed 's|.*/||')
 
   if [ "${serviceFoundInResponse}" = "${service_name}" ]; then
     echo true
