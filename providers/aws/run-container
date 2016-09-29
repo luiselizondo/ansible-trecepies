@@ -48,7 +48,7 @@ function getContainerInstanceArn() {
 
   instanceArn=$(/opt/providers/aws/get-instance-arn-from-ec2-instance-id --cluster ${ENVIRONMENT} --instanceId $instance_id)
 
-  echo instanceArn
+  echo $instanceArn
 }
 
 TASK_DEFINITION_NAME="ecscompose-${PROJECT_NAME}:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
