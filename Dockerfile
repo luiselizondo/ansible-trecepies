@@ -50,7 +50,8 @@ RUN sed -i 's/PermitRootLogin .*/PermitRootLogin yes/g' /etc/ssh/sshd_config \
     && echo "Host *" >> /root/.ssh/config \
     && echo "StrictHostKeyChecking no" >> /root/.ssh/config \
     && echo "UserKnownHostsFile=/dev/null" >> /root/.ssh/config \
-    && mkdir -p /root/.aws
+    && mkdir -p /root/.aws \
+    && pip install boto3
 
 VOLUME /keys
 
