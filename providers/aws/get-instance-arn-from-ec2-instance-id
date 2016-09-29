@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import boto3
+import sys
+import getopt
+
+client = boto3.client('ecs')
+
+def listContainerInstances(cluster):
+    response = client.list_container_instances(cluster=cluster)
+    return response["containerInstanceArns"]
+
+def getContainerInstances(cluster, containerInstances):
+    response = client.describe_container_instances(cluster=cluster, containerInstances=containerInstances)
+    return response["containerInstances"]
+
+def printHelp():
+    print 'get-instance-arn-from-ec2-instance --cluster <cluster> --instanceId <instanceId>'
+    return
+
+def getArnOfInstanceId(instances, instanceId):
+    containerInstanceArn=""
+    for instance in instances:
+        if instance['ec2InstanceId'] == instanceId:
+            containerInstanceArn = instance["containerInstanceArn"]
+
+    return containerInstanceArn
+
+def main(argv):
+    instanceId = ''
+    cluster = ''
+    try:
+        opts, args = getopt.getopt(argv,"hc:i:",["cluster=","instanceId="])
+    except getopt.GetoptError:
+        printHelp()
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            printHelp()
+            sys.exit()
+        elif opt in ("-i", "--instanceId"):
+            instanceId = arg
+        elif opt in ("-c", "--cluster"):
+            cluster = arg
+
+    containerInstances = listContainerInstances(cluster)
+    instancesDescribed = getContainerInstances(cluster, containerInstances)
+
+    arn = getArnOfInstanceId(instancesDescribed, instanceId)
+    print arn
+    return
+
+if __name__ == "__main__":
+   main(sys.argv[1:])

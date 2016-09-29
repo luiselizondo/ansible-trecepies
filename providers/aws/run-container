@@ -10,7 +10,7 @@ ENVIRONMENT=${ENVIRONMENT}
 HOW_MANY_INSTANCES=1
 CONTAINER_INSTANCE_ID=${CONTAINER_INSTANCE_ID}
 PROJECT_NAME=${PROJECT_NAME}
-
+CONTAINER_INSTANCE_ID=${CONTAINER_INSTANCE_ID}
 AWS_ROLE=${AWS_ECS_ROLE}
 ECS_COMPOSE_FILENAME=ecs-compose.yml
 
@@ -43,7 +43,16 @@ function getLatestTaskDefinitionRevision() {
   echo $revision
 }
 
+function getContainerInstanceArn() {
+  instance_id=$1
+
+  instanceArn=$(/opt/providers/aws/get-instance-arn-from-ec2-instance-id --cluster ${ENVIRONMENT} --instanceId $instance_id)
+
+  echo instanceArn
+}
+
 TASK_DEFINITION_NAME="ecscompose-${PROJECT_NAME}:$(getLatestTaskDefinitionRevision ${PROJECT_NAME})"
+CONTAINER_INSTANCE_ARN=$(getContainerInstanceArn ${CONTAINER_INSTANCE_ID})
 
 # function determineIfServiceExists() {
 #   service_name=$1
@@ -62,4 +71,4 @@ TASK_DEFINITION_NAME="ecscompose-${PROJECT_NAME}:$(getLatestTaskDefinitionRevisi
 aws ecs start-task \
   --cluster ${ENVIRONMENT} \
   --task-definition ${TASK_DEFINITION_NAME} \
-  --container-instances ${CONTAINER_INSTANCE_ID}
+  --container-instances ${CONTAINER_INSTANCE_ARN}
