@@ -103,7 +103,7 @@ function waitForInstanceStatus() {
 function tagInstances() {
   instanceId=$1
   tags=$2
-  result=$(create-tags --resources $instanceId \
+  result=$(aws ec2 create-tags --resources $instanceId \
     --tags $tags)
 
   echo $result
