@@ -71,15 +71,15 @@ USERNAME=ubuntu
 function makeSureTheHardDiskSpaceIsValid() {
   size=$1
   harddisk_size=8
-  if [ "${size}" -eq "8GB" ]; then
+  if [ "${size}" = "8GB" ]; then
     harddisk_size=8
-  elif [[ "${size}" -eq "16GB" ]]; then
+  elif [[ "${size}" = "16GB" ]]; then
     harddisk_size=16
-  elif [[ "${size}" -eq "24GB" ]]; then
+  elif [[ "${size}" = "24GB" ]]; then
     harddisk_size=24
-  elif [[ "${size}" -eq "32GB" ]]; then
+  elif [[ "${size}" = "32GB" ]]; then
     harddisk_size=32
-  elif [[ "${size}" -eq "128GB" ]]; then
+  elif [[ "${size}" = "128GB" ]]; then
     harddisk_size=128
   else
     harddisk_size=8
