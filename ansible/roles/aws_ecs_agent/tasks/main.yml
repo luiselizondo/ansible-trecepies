@@ -18,6 +18,11 @@
     name: docker-py
     version: 1.7.0
 
+- name: Copy env variables file
+  copy:
+    src: roles/aws_ecs_agent/files/env_file
+    dest: /etc/env_file
+
 - name: Create the Agent Container
   docker_container:
     state: started
@@ -31,7 +36,7 @@
       ECS_DATADIR: /data
       ECS_CLUSTER: '{{ cluster_name }}'
       ECS_ENABLE_TASK_IAM_ROLE: true
-      ECS_AVAILABLE_LOGGING_DRIVERS: '[\"json-file\",\"awslogs\"]'
+    env_file: /etc/env_file
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/log/ecs/:/log

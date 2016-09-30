@@ -15,4 +15,5 @@ docker run -it --privileged --rm \
   -e "KEY_PAIR_NAME=${KEY_PAIR_NAME}" \
   -e "SECURITY_GROUP_ID=${SECURITY_GROUP_ID}" \
   -e "SUBNET_ID=${SUBNET_ID}" \
+  -v "${HOME}/.ssh:/keys" \
   $IMAGE_NAME /bin/bash

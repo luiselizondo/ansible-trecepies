@@ -122,7 +122,7 @@ do
 done
 
 echo "All images are ready"
-
+echo "Tagging instance(s)"
 for instanceId in $instancesIds
 do
   NAME=${NAME_PREFIX}-${AWS_CLUSTER_NAME}-${instanceId}
