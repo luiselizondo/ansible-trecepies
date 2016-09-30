@@ -23,6 +23,7 @@ AWS_CLUSTER_NAME=${CLUSTER_NAME}
 AWS_IAM_INSTANCE_PROFILE=${IAM_INSTANCE_PROFILE}
 AWS_AVAILABILITY_ZONE=${AVAILABILITY_ZONE}
 NAME_PREFIX=${NAME_PREFIX}
+HARDDISK_SIZE=${HARDDISK_SIZE}
 
 IMAGE_ID_OF_US_EAST_1=ami-c17ce0d6
 IMAGE_ID_OF_US_WEST_1=ami-b74b08d7
@@ -67,11 +68,34 @@ esac
 UBUNTU_IMAGE_ID=ami-2d39803a
 USERNAME=ubuntu
 
+function makeSureTheHardDiskSpaceIsValid() {
+  size=$1
+  harddisk_size=8
+  if [ "${size}" -eq "8GB" ]; then
+    harddisk_size=8
+  elif [[ "${size}" -eq "16GB" ]]; then
+    harddisk_size=16
+  elif [[ "${size}" -eq "24GB" ]]; then
+    harddisk_size=24
+  elif [[ "${size}" -eq "32GB" ]]; then
+    harddisk_size=32
+  elif [[ "${size}" -eq "128GB" ]]; then
+    harddisk_size=128
+  else
+    harddisk_size=8
+  fi
+
+  echo $harddisk_size
+}
+
+
 # TODO: Filter out invalid types of machines or create a list of valid machines
 # TODO: Create subnet if neccesary
 
 OUTPUT=`mktemp`
 export AWS_DEFAULT_OUTPUT="json"
+
+VOLUME_SIZE=$(makeSureTheHardDiskSpaceIsValid ${HARDDISK_SIZE})
 
 # Executes main command
 aws ec2 run-instances \
@@ -82,6 +106,7 @@ aws ec2 run-instances \
   --subnet-id $AWS_SUBNET_ID \
   --security-group-ids $AWS_SECURITY_GROUP_ID \
   --iam-instance-profile Name="${AWS_IAM_INSTANCE_PROFILE}" \
+  --block-device-mapping "[ { \"DeviceName\": \"/dev/sda1\", \"Ebs\": { \"VolumeSize\": ${VOLUME_SIZE} } } ]" \
   --no-associate-public-ip-address \
   --user-data "#!/bin/bash\n
 echo ECS_CLUSTER=${AWS_CLUSTER_NAME} >> /etc/ecs/ecs.config" | tee $OUTPUT
