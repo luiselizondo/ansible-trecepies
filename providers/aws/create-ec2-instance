@@ -22,6 +22,7 @@ AWS_SUBNET_ID=${SUBNET_ID}
 AWS_CLUSTER_NAME=${CLUSTER_NAME}
 AWS_IAM_INSTANCE_PROFILE=${IAM_INSTANCE_PROFILE}
 AWS_AVAILABILITY_ZONE=${AVAILABILITY_ZONE}
+NAME=${NAME}
 
 IMAGE_ID_OF_US_EAST_1=ami-c17ce0d6
 IMAGE_ID_OF_US_WEST_1=ami-b74b08d7
@@ -99,6 +100,15 @@ function waitForInstanceStatus() {
   echo $status
 }
 
+function tagInstances() {
+  instanceId=$1
+  tags=$2
+  result=$(create-tags --resources $instanceId \
+    --tags $tags)
+
+  echo $result
+}
+
 for instanceId in $instancesIds
 do
   echo "Checking if the instance $instanceId is running"
@@ -112,6 +122,11 @@ do
 done
 
 echo "All images are ready"
+
+for instanceId in $instancesIds
+do
+  tagInstances $instanceId "Key=Name,Value=${NAME} Key=Environment,Value=${AWS_CLUSTER_NAME} Key=Region,Value=${AWS_DEFAULT_REGION}"
+done
 
 function getPrivateIPOfInstance() {
   id=$(removeSpacesFromString $1)
