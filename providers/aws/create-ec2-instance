@@ -125,7 +125,8 @@ echo "All images are ready"
 
 for instanceId in $instancesIds
 do
-  tagInstances $instanceId "Key=Name,Value=${NAME_PREFIX}-${instanceId} Key=Environment,Value=${AWS_CLUSTER_NAME} Key=Region,Value=${AWS_DEFAULT_REGION}"
+  NAME=${NAME_PREFIX}-${AWS_CLUSTER_NAME}-${instanceId}
+  tagInstances $instanceId "Key=Name,Value=${NAME} Key=Environment,Value=${AWS_CLUSTER_NAME} Key=Region,Value=${AWS_DEFAULT_REGION}"
 done
 
 function getPrivateIPOfInstance() {
