@@ -22,7 +22,7 @@ AWS_SUBNET_ID=${SUBNET_ID}
 AWS_CLUSTER_NAME=${CLUSTER_NAME}
 AWS_IAM_INSTANCE_PROFILE=${IAM_INSTANCE_PROFILE}
 AWS_AVAILABILITY_ZONE=${AVAILABILITY_ZONE}
-NAME=${NAME}
+NAME_PREFIX=${NAME_PREFIX}
 
 IMAGE_ID_OF_US_EAST_1=ami-c17ce0d6
 IMAGE_ID_OF_US_WEST_1=ami-b74b08d7
@@ -125,7 +125,7 @@ echo "All images are ready"
 
 for instanceId in $instancesIds
 do
-  tagInstances $instanceId "Key=Name,Value=${NAME} Key=Environment,Value=${AWS_CLUSTER_NAME} Key=Region,Value=${AWS_DEFAULT_REGION}"
+  tagInstances $instanceId "Key=Name,Value=${NAME_PREFIX}-${instanceId} Key=Environment,Value=${AWS_CLUSTER_NAME} Key=Region,Value=${AWS_DEFAULT_REGION}"
 done
 
 function getPrivateIPOfInstance() {
