@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+set -u
+
+AWS_CLUSTER_NAME=${ENVIRONMENT}
+PRIVATE_KEY_NAME=${PRIVATE_KEY_NAME}
+USERNAME=${USERNAME}
+
+privateIPs=${HOSTS_IPS}
+
+echo "Running Ansible on hosts ${privateIPs}"
+/opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${PRIVATE_KEY_NAME} ${USERNAME} "${privateIPs}"
