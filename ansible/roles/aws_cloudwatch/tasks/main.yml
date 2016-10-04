@@ -14,7 +14,7 @@
 - name: Parse the config file
   lineinfile:
     dest: /etc/cloudwatch-config.cfg
-    line: log_group_name = '{{ cluster_name }}'-hosts
+    line: log_group_name = '{{ cluster_name }}-hosts'
     state: present
   tags: aws_cloudwatch
 
