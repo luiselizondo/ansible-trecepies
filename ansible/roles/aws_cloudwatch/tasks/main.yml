@@ -12,6 +12,11 @@
   tags: aws_cloudwatch
 
 - name: Parse the config file
+  lineinfile:
+    dest: /etc/cloudwatch-config.cfg
+    line: log_group_name = '{{ cluster_name }}'-hosts
+    state: present
+
   shell: sed -i "s|@@LOG_GROUP_NAME@@|'{{ cluster_name }}'" /etc/cloudwatch-config.cfg
   tags: aws_cloudwatch
 
