@@ -36,6 +36,17 @@ function runAnsibleOnHosts() {
 runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
 if [ ! -z "${TAGS}" ]; then
+  echo "Installing with custom tasks to: $(cat $HOSTS_FILE)"
+  ansible-playbook \
+  --user=${USERNAME} \
+  --private-key=/keys/${PRIVATE_KEY_NAME} \
+  --extra-vars="cluster_name=${CLUSTER_NAME}" \
+  --verbose \
+  --become \
+  -c paramiko \
+  -t ${TASKS} \
+  --inventory-file=$HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml
+else
   echo "Tags is empty, executing default command"
   echo "Installing to: $(cat $HOSTS_FILE)"
   ansible-playbook \
@@ -45,16 +56,5 @@ if [ ! -z "${TAGS}" ]; then
   --verbose \
   --become \
   -c paramiko \
-  --inventory-file=$HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml
-else
-  echo "Installing to: $(cat $HOSTS_FILE)"
-  ansible-playbook \
-  --user=${USERNAME} \
-  --private-key=/keys/${PRIVATE_KEY_NAME} \
-  --extra-vars="cluster_name=${CLUSTER_NAME}" \
-  --verbose \
-  --become \
-  -c paramiko \
-  -t ${TASKS} \
   --inventory-file=$HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml
 fi
