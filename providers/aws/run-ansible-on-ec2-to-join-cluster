@@ -3,6 +3,7 @@
 
 TAGS=""
 if [ ! -z "${TASKS}" ]; then
+  echo "Tasks are set"
   TAGS=${TASKS}
 fi
 
