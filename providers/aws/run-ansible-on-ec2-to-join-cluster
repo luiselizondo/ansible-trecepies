@@ -34,7 +34,7 @@ function runAnsibleOnHosts() {
 
 runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
-if [ -z "${TAGS}" ]; then
+if [ ! -z "${TAGS}" ]; then
   echo "Tags is empty, executing default command"
 
   echo "Installing to: $(cat $HOSTS_FILE)"

@@ -4,7 +4,7 @@
     dest: /tmp/awslogs-agent-setup.py
     mode: u+rwx
 
-- name: Copy env variables file
+- name: Copy config file
   copy:
     src: roles/aws_cloudwatch/files/cloudwatch-config.cfg
     dest: /etc/cloudwatch-config.cfg
