@@ -14,6 +14,7 @@ CLUSTER_NAME=$1
 PRIVATE_KEY_NAME=$2
 USERNAME=$3
 HOSTS_TO_CONFIGURE=$4
+AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
 
 function errorTrap {
   status=$?
@@ -51,7 +52,7 @@ else
   ansible-playbook \
   --user=${USERNAME} \
   --private-key=/keys/${PRIVATE_KEY_NAME} \
-  --extra-vars="cluster_name=${CLUSTER_NAME}" \
+  --extra-vars="cluster_name=${CLUSTER_NAME} region=${AWS_DEFAULT_REGION}" \
   --verbose \
   --become \
   -c paramiko \

@@ -1,0 +1,13 @@
+- name: Download awslogs-agent-setup
+  get_url:
+    url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
+    dest: /tmp/awslogs-agent-setup.py
+    mode: u+rwx
+
+- name: Copy env variables file
+  copy:
+    src: roles/aws_cloudwatch/files/cloudwatch-config.cfg
+    dest: /etc/cloudwatch-config.cfg
+
+- name: Execute the awslogs-agent-setup
+  shell: awslogs-agent-setup.py -n -r {{ region }} -c /etc/cloudwatch-config.cfg

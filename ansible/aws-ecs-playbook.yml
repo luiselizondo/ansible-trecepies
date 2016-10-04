@@ -9,6 +9,7 @@
     - common
     - docker_trusty
     - aws_ecs_agent
+    - aws_cloudwatch
   pre_tasks:
     - raw: sudo apt-get update --fix-missing
     - raw: sudo apt-get -y install python-simplejson python-pip
