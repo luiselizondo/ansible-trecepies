@@ -11,3 +11,6 @@
 
 - name: Execute the awslogs-agent-setup
   shell: /tmp/awslogs-agent-setup.py -n -r {{ region }} -c /etc/cloudwatch-config.cfg
+
+- name: Start service
+  service: name=awslogs state=started
