@@ -11,6 +11,10 @@
     dest: /etc/cloudwatch-config.cfg
   tags: aws_cloudwatch
 
+- name: Parse the config file
+  shell: sed -i "s|@@LOG_GROUP_NAME@@|'{{ cluster_name }}'" /etc/cloudwatch-config.cfg
+  tags: aws_cloudwatch
+
 - name: Execute the awslogs-agent-setup
   shell: /tmp/awslogs-agent-setup.py -n -r {{ region }} -c /etc/cloudwatch-config.cfg
   tags: aws_cloudwatch
