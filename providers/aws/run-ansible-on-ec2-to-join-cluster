@@ -40,7 +40,7 @@ if [ ! -z "${TAGS}" ]; then
   ansible-playbook \
   --user=${USERNAME} \
   --private-key=/keys/${PRIVATE_KEY_NAME} \
-  --extra-vars="cluster_name=${CLUSTER_NAME}" \
+  --extra-vars="cluster_name=${CLUSTER_NAME} region=${AWS_DEFAULT_REGION}" \
   --verbose \
   --become \
   -c paramiko \
