@@ -44,7 +44,7 @@ if [ ! -z "${TAGS}" ]; then
   --verbose \
   --become \
   -c paramiko \
-  -t ${TASKS} \
+  -t "${TASKS}" \
   --inventory-file=$HOSTS_FILE /opt/ansible/aws-ecs-playbook.yml
 else
   echo "Tags is empty, executing default command"
