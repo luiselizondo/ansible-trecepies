@@ -10,4 +10,4 @@
     dest: /etc/cloudwatch-config.cfg
 
 - name: Execute the awslogs-agent-setup
-  shell: awslogs-agent-setup.py -n -r {{ region }} -c /etc/cloudwatch-config.cfg
+  shell: /tmp/awslogs-agent-setup.py -n -r {{ region }} -c /etc/cloudwatch-config.cfg
