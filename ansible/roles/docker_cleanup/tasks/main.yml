@@ -1,3 +1,13 @@
+- name: Copy script file
+  copy:
+    src: roles/docker_cleanup/files/remove-docker-images-and-stopped-containers
+    dest: /opt/remove-docker-images-and-stopped-containers
+  tags: docker_cleanup
+
+- name: Grant permissions
+  shell: chmod +x /opt/remove-docker-images-and-stopped-containers
+  tags: docker_cleanup
+
 - name: Execute the awslogs-agent-setup
   shell: docker images -q | xargs docker rmi
   tags: docker_cleanup
