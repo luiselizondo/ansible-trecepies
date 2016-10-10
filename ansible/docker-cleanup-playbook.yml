@@ -1,0 +1,9 @@
+- name: docker cleanup
+  hosts: aws_ecs_cluster
+  become: true
+  become_user: root
+  gather_facts: no
+  vars:
+    cluster_name: '{{ cluster_name }}'
+  roles:
+    - docker_cleanup
