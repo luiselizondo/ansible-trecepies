@@ -9,5 +9,5 @@
   tags: docker_cleanup
 
 - name: Execute the awslogs-agent-setup
-  shell: docker images -q | xargs docker rmi
+  shell: /opt/remove-docker-images-and-stopped-containers
   tags: docker_cleanup
