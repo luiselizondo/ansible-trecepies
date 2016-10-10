@@ -8,7 +8,6 @@ TASKS="docker_cleanup"
 CLUSTER_NAME=$1
 PRIVATE_KEY_NAME=$2
 USERNAME=$3
-HOSTS_TO_CONFIGURE=$4
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
 
 function errorTrap {
@@ -27,6 +26,18 @@ function runAnsibleOnHosts() {
   done
 }
 
+function getHostsToConfigure() {
+  PRIVATE_IPS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=${CLUSTER_NAME}" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].PrivateIpAddress' --output=text)
+
+  HOSTS=""
+  for private in $PRIVATE_IPS; do
+    HOSTS="${HOSTS}${private},"
+  done
+
+  echo "${HOSTS%?}"
+}
+
+HOSTS_TO_CONFIGURE=$(getHostsToConfigure)
 runAnsibleOnHosts "${HOSTS_TO_CONFIGURE}"
 
 echo "Running custom task docker_cleanup to: $(cat $HOSTS_FILE)"
