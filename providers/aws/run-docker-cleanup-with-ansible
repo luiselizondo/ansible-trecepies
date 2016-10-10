@@ -31,10 +31,10 @@ function getHostsToConfigure() {
 
   HOSTS=""
   for private in $PRIVATE_IPS; do
-    HOSTS="${HOSTS}${private},"
+    HOSTS="${HOSTS} ${private}"
   done
 
-  echo "${HOSTS%?}"
+  echo "$HOSTS"
 }
 
 HOSTS_TO_CONFIGURE=$(getHostsToConfigure)
