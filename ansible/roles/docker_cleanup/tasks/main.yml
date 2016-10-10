@@ -8,6 +8,6 @@
   shell: chmod +x /opt/remove-docker-images-and-stopped-containers
   tags: docker_cleanup
 
-- name: Execute the awslogs-agent-setup
+- name: Removing unused docker images and stopped containers
   shell: /opt/remove-docker-images-and-stopped-containers
   tags: docker_cleanup
