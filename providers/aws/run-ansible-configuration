@@ -1,5 +1,7 @@
 #!/bin/bash
 
+privateIPs=${HOSTS_IPS}
+
 set -e
 set -u
 
@@ -7,7 +9,23 @@ AWS_CLUSTER_NAME=${ENVIRONMENT}
 PRIVATE_KEY_NAME=${PRIVATE_KEY_NAME}
 USERNAME=${USERNAME}
 
-privateIPs=${HOSTS_IPS}
+function getHostsToConfigure() {
+  PRIVATE_IPS=$(aws ec2 describe-instances --filters "Name=tag:Environment,Values=${CLUSTER_NAME}" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].PrivateIpAddress' --output=text)
+
+  HOSTS=""
+  for privateIP in $PRIVATE_IPS; do
+    HOSTS="${HOSTS} ${privateIP}"
+  done
+
+  echo "$HOSTS"
+}
+
+if [ ! -z "${HOSTS_IPS}" ]; then
+  echo "HOSTS_IPS is set ${HOSTS_IPS}"
+  privateIPs=${HOSTS_IPS}
+else
+  privateIPs=$(getHostsToConfigure)
+fi
 
 echo "Running Ansible on hosts ${privateIPs}"
 /opt/providers/aws/run-ansible-on-ec2-to-join-cluster ${AWS_CLUSTER_NAME} ${PRIVATE_KEY_NAME} ${USERNAME} "${privateIPs}"
