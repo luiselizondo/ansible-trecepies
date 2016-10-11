@@ -19,8 +19,7 @@
   tags: aws_cloudwatch
 
 - name: Enable CRON
-  cron: name="Check Instance Data" minute="5" hour="*" job="/opt/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-avail
- --disk-space-util --swap-util --disk-path=/ --from-cron > /dev/null"
+  cron: name="Check Instance Data" minute="5" hour="*" job="/opt/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-avail --disk-space-util --swap-util --disk-path=/ --from-cron > /dev/null"
   tags: aws_cloudwatch
 
 - name: Download awslogs-agent-setup
