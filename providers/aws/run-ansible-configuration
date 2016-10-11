@@ -20,9 +20,9 @@ function getHostsToConfigure() {
   echo "$HOSTS"
 }
 
-if [ ! -z "${HOSTS_IPS}" ]; then
-  echo "HOSTS_IPS is set ${HOSTS_IPS}"
-  privateIPs=${HOSTS_IPS}
+if [ ! -z "${privateIPs}" ]; then
+  echo "HOSTS_IPS is set ${privateIPs}"
+  privateIPs=${privateIPs}
 else
   privateIPs=$(getHostsToConfigure)
 fi
