@@ -1,3 +1,28 @@
+- name: install apt packages
+  apt: pkg={{ item }} update_cache=yes
+  with_items:
+    - libwww-perl
+    - libdatetime-perl
+    - unzip
+  tags: aws_cloudwatch
+
+- name: Download Cloudwatch Monitoring scripts
+  get_url:
+    url: http://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.1.zip
+    dest: /tmp/CloudWatchMonitoringScripts-1.2.1.zip
+  tags: aws_cloudwatch
+
+- name: Unzip CloudWatch scripts
+  unarchive:
+    src: /tmp/CloudWatchMonitoringScripts-1.2.1.zip
+    dest: /opt/aws-scripts-mon
+  tags: aws_cloudwatch
+
+- name: Enable CRON
+  cron: name="Check Instance Data" minute="5" hour="*" job="/opt/aws-scripts-mon/mon-put-instance-data.pl --mem-util --mem-avail
+ --disk-space-util --swap-util --disk-path=/ --from-cron > /dev/null"
+  tags: aws_cloudwatch
+
 - name: Download awslogs-agent-setup
   get_url:
     url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
