@@ -15,7 +15,7 @@
 - name: Unzip CloudWatch scripts
   unarchive:
     src: /tmp/CloudWatchMonitoringScripts-1.2.1.zip
-    dest: /opt/aws-scripts-mon
+    dest: /opt
   tags: aws_cloudwatch
 
 - name: Enable CRON
