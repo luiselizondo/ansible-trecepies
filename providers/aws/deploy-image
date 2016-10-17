@@ -77,4 +77,4 @@ else
 fi
 
 echo "Waiting until the services are ready"
-aws ecs wait services-stable --cluster ${CLUSTER_NAME} --services ${SERVICE_NAME}
+aws ecs wait services-stable --cluster ${ENVIRONMENT} --services ${SERVICE_NAME}
