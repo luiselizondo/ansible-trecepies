@@ -76,5 +76,8 @@ else
     aws ecs create-service --service-name "${SERVICE_NAME}" --cluster "${ENVIRONMENT}" --task-definition "$TASK_DEFINITION_NAME" --load-balancers "targetGroupArn=${LOAD_BALANCER_TARGET_GROUP},containerName=${CONTAINER_NAME},containerPort=${CONTAINER_PORT}" --desired-count ${HOW_MANY_INSTANCES} --deployment-configuration "maximumPercent=100,minimumHealthyPercent=50" --role ${AWS_ROLE}
 fi
 
+echo "Waiting for 5 minutes until we start checking the service"
+sleep 300
+
 echo "Waiting until the services are ready"
 aws ecs wait services-stable --cluster ${ENVIRONMENT} --services ${SERVICE_NAME}
