@@ -1,0 +1,29 @@
+- name: Install curl
+  apt:
+    name: curl
+    state: present
+
+- name: Install python
+  apt:
+    name: python
+    state: present
+
+- name: Install python pip
+  apt:
+    name: python-pip
+    state: present
+
+- name: Install docker-py using pip
+  pip:
+    name: docker-py
+    version: 1.7.0
+
+- name: Start container
+  docker_container:
+    state: started
+    restart: yes
+    name: '{{ container_name }}'
+    image: '{{ image }}'
+    restart_policy: on-failure
+    detach: True
+    network_mode: host
